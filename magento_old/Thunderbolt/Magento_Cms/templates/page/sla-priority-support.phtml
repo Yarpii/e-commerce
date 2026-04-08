@@ -1,0 +1,21 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('SLA & Priority Support')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('Response and escalation model for B2B partners, fleet operators and workshop accounts.')) ?></p>
+
+        <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold"><?= $escaper->escapeHtml(__('Standard SLA')) ?></p><p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Business-hours response for order and product support topics.')) ?></p></div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold"><?= $escaper->escapeHtml(__('Priority Lane')) ?></p><p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Faster triage for operational blockers and urgent shipment exceptions.')) ?></p></div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold"><?= $escaper->escapeHtml(__('Escalation Window')) ?></p><p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Coordinated handoff to logistics, product and account teams where required.')) ?></p></div>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-2 text-sm">
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('b2b-contact-intake')) ?>"><?= $escaper->escapeHtml(__('B2B Contact & Intake')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('fleet-workshop-bulk-ordering-guide')) ?>"><?= $escaper->escapeHtml(__('Fleet Bulk Ordering')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"><?= $escaper->escapeHtml(__('Request priority support')) ?></a>
+        </div>
+    </div>
+</section>

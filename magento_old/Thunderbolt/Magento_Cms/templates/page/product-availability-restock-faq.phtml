@@ -1,0 +1,30 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('Product Availability & Restock FAQ')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('Understand stock status, restock timing and how to plan around high-demand products.')) ?></p>
+
+        <div class="mt-5 space-y-3">
+            <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <summary class="cursor-pointer font-semibold"><?= $escaper->escapeHtml(__('What does backorder mean?')) ?></summary>
+                <p class="mt-2 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Backorder means the item can still be ordered while incoming inventory is scheduled from supplier or warehouse transfer.')) ?></p>
+            </details>
+            <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <summary class="cursor-pointer font-semibold"><?= $escaper->escapeHtml(__('How accurate are restock dates?')) ?></summary>
+                <p class="mt-2 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Dates are best estimates and can shift with supplier lead time, logistics and customs processing.')) ?></p>
+            </details>
+            <details class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <summary class="cursor-pointer font-semibold"><?= $escaper->escapeHtml(__('Can I reserve stock for upcoming builds?')) ?></summary>
+                <p class="mt-2 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('For larger or business orders, contact our B2B team to discuss allocation and phased fulfillment options.')) ?></p>
+            </details>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-2 text-sm">
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('faq-hub')) ?>"><?= $escaper->escapeHtml(__('Open FAQ Hub')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('b2b-contact-intake')) ?>"><?= $escaper->escapeHtml(__('B2B stock planning request')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"><?= $escaper->escapeHtml(__('Ask product support')) ?></a>
+        </div>
+    </div>
+</section>

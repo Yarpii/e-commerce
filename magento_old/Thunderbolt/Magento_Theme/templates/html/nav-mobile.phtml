@@ -1,0 +1,25 @@
+<?php
+/** @var \Magento\Theme\Block\Html\Topmenu $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<nav
+    class="lg:hidden"
+    x-data="{ open: false }"
+    @tb-nav-toggle.window="open = !open"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Mobile Navigation')) ?>"
+>
+    <div
+        class="border-t border-[var(--color-border)] bg-[var(--color-surface)]"
+        x-show="open"
+        x-transition:enter="transition ease-out duration-200"
+        x-transition:enter-start="opacity-0 -translate-y-1"
+        x-transition:enter-end="opacity-100 translate-y-0"
+        x-transition:leave="transition ease-in duration-150"
+        x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+    >
+        <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-3 [&_.level0>a]:block [&_.level0>a]:rounded-[var(--radius-button)] [&_.level0>a]:px-3 [&_.level0>a]:py-2.5 [&_.level0>a]:text-[var(--color-text)] [&_.level0>a]:font-semibold [&_.level0>a:hover]:bg-[var(--color-bg)] [&_.level0>a:hover]:text-[var(--color-accent)] [&_.submenu]:pl-3">
+            <?= /* @noEscape */ $block->getHtml('level-top', 'submenu', 0) ?>
+        </div>
+    </div>
+</nav>

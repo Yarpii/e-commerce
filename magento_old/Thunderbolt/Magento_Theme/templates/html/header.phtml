@@ -1,0 +1,699 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+if (!function_exists('__')) {
+    function __($text, ...$args)
+    {
+        $message = (string) $text;
+        return $args ? vsprintf($message, array_map('strval', $args)) : $message;
+    }
+}
+
+$catalogSearchUrl = $escaper->escapeUrl($block->getUrl('catalogsearch/result'));
+?>
+<!-- ── Topbar ── -->
+<div
+    x-data="{
+        fixed: false,
+        headerH: 0,
+        topbarH: 0,
+        garageOpen: false,
+        vehicles: [],
+        activeVehicleId: null,
+        draftVehicle: { type: '', manufacturer: '', model: '', engine: '', year: '' },
+        vehicleTypes: ['Scooter', 'Moped', 'Crossmotor', 'Maxi scooter', 'Motorcycle', 'ATV'],
+        fitmentData: {
+            'Scooter': {
+                'Piaggio': {
+                    'Zip 50 2T': { '50cc 2T': ['2018', '2019', '2020', '2021', '2022'] },
+                    'Typhoon 50': { '50cc 2T': ['2017', '2018', '2019', '2020'] }
+                },
+                'Vespa': {
+                    'Sprint 50': { '50cc 4T': ['2020', '2021', '2022', '2023'] },
+                    'GTS 300': { '300cc': ['2019', '2020', '2021', '2022', '2023'] }
+                },
+                'Yamaha': {
+                    'Aerox 4': { '50cc 4T': ['2019', '2020', '2021'] },
+                    'XMAX 300': { '300cc': ['2020', '2021', '2022', '2023'] }
+                },
+                'SYM': {
+                    'Orbit II': { '50cc 4T': ['2018', '2019', '2020', '2021', '2022'] },
+                    'Jet 14': { '125cc': ['2020', '2021', '2022', '2023'] }
+                }
+            },
+            'Moped': {
+                'Rieju': {
+                    'MRT 50': { '50cc': ['2019', '2020', '2021', '2022'] }
+                },
+                'Beta': {
+                    'RR 50 Motard': { '50cc': ['2020', '2021', '2022'] }
+                }
+            },
+            'Crossmotor': {
+                'Yamaha': {
+                    'YZ 125': { '125cc': ['2019', '2020', '2021', '2022'] }
+                },
+                'Honda': {
+                    'CRF 250R': { '250cc': ['2018', '2019', '2020', '2021'] }
+                }
+            },
+            'Maxi scooter': {
+                'Yamaha': {
+                    'TMAX': { '560cc': ['2021', '2022', '2023'] }
+                },
+                'Kymco': {
+                    'AK 550': { '550cc': ['2020', '2021', '2022'] }
+                }
+            },
+            'Motorcycle': {
+                'Kawasaki': {
+                    'Z650': { '650cc': ['2019', '2020', '2021', '2022'] }
+                }
+            },
+            'ATV': {
+                'Yamaha': {
+                    'Kodiak 450': { '450cc': ['2019', '2020', '2021'] }
+                }
+            }
+        },
+        searchBaseUrl: '<?= $escaper->escapeJs($catalogSearchUrl) ?>',
+        onScroll() {
+            this.fixed = window.scrollY > this.topbarH;
+        },
+        emptyDraftVehicle() {
+            return { type: '', manufacturer: '', model: '', engine: '', year: '' };
+        },
+        buildVehicleLabel(vehicle) {
+            if (!vehicle) {
+                return '';
+            }
+            return [vehicle.type, vehicle.manufacturer, vehicle.model, vehicle.engine, vehicle.year]
+                .map(value => (value || '').toString().trim())
+                .filter(Boolean)
+                .join(' · ');
+        },
+        vehicleMeta(vehicle) {
+            if (!vehicle) {
+                return '';
+            }
+            return [vehicle.type, vehicle.engine, vehicle.year]
+                .map(value => (value || '').toString().trim())
+                .filter(Boolean)
+                .join(' / ');
+        },
+        manufacturers() {
+            return Object.keys(this.fitmentData[this.draftVehicle.type] || {});
+        },
+        models() {
+            const byType = this.fitmentData[this.draftVehicle.type] || {};
+            return Object.keys(byType[this.draftVehicle.manufacturer] || {});
+        },
+        engines() {
+            const byType = this.fitmentData[this.draftVehicle.type] || {};
+            const byManufacturer = byType[this.draftVehicle.manufacturer] || {};
+            return Object.keys(byManufacturer[this.draftVehicle.model] || {});
+        },
+        years() {
+            const byType = this.fitmentData[this.draftVehicle.type] || {};
+            const byManufacturer = byType[this.draftVehicle.manufacturer] || {};
+            const byModel = byManufacturer[this.draftVehicle.model] || {};
+            return byModel[this.draftVehicle.engine] || [];
+        },
+        currentStep() {
+            if (!this.draftVehicle.type) {
+                return 0;
+            }
+            if (!this.draftVehicle.manufacturer) {
+                return 1;
+            }
+            if (!this.draftVehicle.model) {
+                return 2;
+            }
+            if (!this.draftVehicle.engine) {
+                return 3;
+            }
+            if (!this.draftVehicle.year) {
+                return 4;
+            }
+            return 5;
+        },
+        setType(type) {
+            this.draftVehicle.type = type;
+            this.draftVehicle.manufacturer = '';
+            this.draftVehicle.model = '';
+            this.draftVehicle.engine = '';
+            this.draftVehicle.year = '';
+        },
+        setManufacturer(manufacturer) {
+            this.draftVehicle.manufacturer = manufacturer;
+            this.draftVehicle.model = '';
+            this.draftVehicle.engine = '';
+            this.draftVehicle.year = '';
+        },
+        setModel(model) {
+            this.draftVehicle.model = model;
+            this.draftVehicle.engine = '';
+            this.draftVehicle.year = '';
+        },
+        setEngine(engine) {
+            this.draftVehicle.engine = engine;
+            this.draftVehicle.year = '';
+        },
+        canAddVehicle() {
+            return !!(this.draftVehicle.type && this.draftVehicle.manufacturer && this.draftVehicle.model && this.draftVehicle.engine && this.draftVehicle.year && this.garageCount() < 5);
+        },
+        normalizeVehicle(vehicle) {
+            if (!vehicle || typeof vehicle !== 'object') {
+                return null;
+            }
+            if (vehicle.name && !vehicle.manufacturer && !vehicle.model) {
+                return {
+                    id: vehicle.id || Date.now(),
+                    type: 'Scooter',
+                    manufacturer: '',
+                    model: vehicle.name,
+                    engine: '',
+                    year: '',
+                    name: vehicle.name
+                };
+            }
+            const normalized = {
+                id: vehicle.id || Date.now(),
+                type: (vehicle.type || 'Scooter').toString().trim(),
+                manufacturer: (vehicle.manufacturer || '').toString().trim(),
+                model: (vehicle.model || '').toString().trim(),
+                engine: (vehicle.engine || '').toString().trim(),
+                year: (vehicle.year || '').toString().trim()
+            };
+            normalized.name = this.buildVehicleLabel(normalized);
+            return normalized.name ? normalized : null;
+        },
+        loadGarage() {
+            try {
+                const vehicles = JSON.parse(localStorage.getItem('thunderbolt-garage') || '[]');
+                this.vehicles = Array.isArray(vehicles)
+                    ? vehicles.map(vehicle => this.normalizeVehicle(vehicle)).filter(Boolean).slice(0, 5)
+                    : [];
+            } catch (e) {
+                this.vehicles = [];
+            }
+            const savedMain = localStorage.getItem('thunderbolt-main-vehicle');
+            this.activeVehicleId = savedMain ? Number(savedMain) : null;
+            if (this.activeVehicleId === null && this.vehicles.length) {
+                this.activeVehicleId = this.vehicles[0].id;
+            }
+        },
+        persistGarage() {
+            localStorage.setItem('thunderbolt-garage', JSON.stringify(this.vehicles.slice(0, 5)));
+            if (this.activeVehicleId) {
+                localStorage.setItem('thunderbolt-main-vehicle', String(this.activeVehicleId));
+            } else {
+                localStorage.removeItem('thunderbolt-main-vehicle');
+            }
+        },
+        mainVehicle() {
+            return this.vehicles.find(vehicle => vehicle.id === this.activeVehicleId) || this.vehicles[0] || null;
+        },
+        mainVehicleLabel() {
+            const vehicle = this.mainVehicle();
+            return vehicle ? vehicle.name : '';
+        },
+        garageCount() {
+            return this.vehicles.length;
+        },
+        addVehicle() {
+            const normalized = this.normalizeVehicle({
+                id: Date.now(),
+                type: this.draftVehicle.type,
+                manufacturer: this.draftVehicle.manufacturer,
+                model: this.draftVehicle.model,
+                engine: this.draftVehicle.engine,
+                year: this.draftVehicle.year
+            });
+            if (!this.canAddVehicle() || !normalized || this.vehicles.some(vehicle => vehicle.name.toLowerCase() === normalized.name.toLowerCase())) {
+                return;
+            }
+            this.vehicles = [...this.vehicles, normalized];
+            if (!this.activeVehicleId) {
+                this.activeVehicleId = normalized.id;
+            }
+            this.draftVehicle = this.emptyDraftVehicle();
+            this.persistGarage();
+        },
+        setMainVehicle(id) {
+            this.activeVehicleId = id;
+            this.persistGarage();
+            this.garageOpen = false;
+        },
+        removeVehicle(id) {
+            this.vehicles = this.vehicles.filter(vehicle => vehicle.id !== id);
+            if (this.activeVehicleId === id) {
+                this.activeVehicleId = this.vehicles.length ? this.vehicles[0].id : null;
+            }
+            this.persistGarage();
+        },
+        clearGarage() {
+            this.vehicles = [];
+            this.activeVehicleId = null;
+            this.persistGarage();
+        },
+        browseMainVehicle() {
+            const vehicle = this.mainVehicleLabel();
+            if (!vehicle) {
+                this.garageOpen = true;
+                return;
+            }
+            const url = new URL(this.searchBaseUrl, window.location.origin);
+            url.searchParams.set('q', vehicle);
+            url.searchParams.set('vehicle', vehicle);
+            window.location.href = url.toString();
+        },
+        measure() {
+            this.headerH = this.$refs.mainHeader ? this.$refs.mainHeader.offsetHeight : 0;
+            this.topbarH = this.$refs.topbar ? this.$refs.topbar.offsetHeight : 0;
+            this.onScroll();
+        }
+    }"
+    x-init="loadGarage(); measure(); window.addEventListener('scroll', () => onScroll(), { passive: true }); window.addEventListener('resize', () => measure())"
+    @keydown.escape.window="garageOpen = false"
+>
+<div x-ref="topbar" class="hidden xs:block border-b border-white/15 bg-zinc-900 text-[0.8125rem] text-white">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] flex items-center justify-between min-h-[2.5rem] py-0.5 gap-4 flex-wrap">
+        <!-- Left: language/currency — hidden on small -->
+        <div class="hidden md:flex items-center gap-4">
+            <a href="<?= $escaper->escapeUrl($block->getUrl('language-country-currency')) ?>" class="text-white/80 hover:text-white transition-colors no-underline"><?= $escaper->escapeHtml(__('Language / Country')) ?></a>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('language-country-currency')) ?>#currency" class="text-white/80 hover:text-white transition-colors no-underline"><?= $escaper->escapeHtml(__('Currency')) ?></a>
+        </div>
+        <!-- Right: phone (lg+), login, theme toggle -->
+        <div class="flex items-center gap-3 ml-auto">
+            <a href="tel:+18005551234" class="hidden lg:inline text-white/80 hover:text-white transition-colors no-underline"><?= $escaper->escapeHtml(__('Customer Service: +1 800 555 1234')) ?></a>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account')) ?>" class="text-white/80 hover:text-white transition-colors no-underline"><?= $escaper->escapeHtml(__('Login / Account')) ?></a>
+            <button
+                type="button"
+                class="inline-flex h-8 items-center gap-1.5 rounded-md border border-white/25 bg-white/10 px-2 text-white/85 transition-colors hover:border-white/50 hover:text-white"
+                x-data="{ dark: (localStorage.getItem('thunderbolt-theme') || localStorage.getItem('sd-theme')) === 'dark' }"
+                x-init="document.documentElement.classList.toggle('dark', dark)"
+                @click="dark = !dark; document.documentElement.classList.toggle('dark', dark); localStorage.setItem('thunderbolt-theme', dark ? 'dark' : 'light'); localStorage.removeItem('sd-theme')"
+                :aria-pressed="dark.toString()"
+                :aria-label="dark ? '<?= $escaper->escapeHtmlAttr(__('Switch to light mode')) ?>' : '<?= $escaper->escapeHtmlAttr(__('Switch to dark mode')) ?>'"
+            >
+                <svg x-show="!dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg x-show="dark" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <span class="hidden sm:inline" x-show="!dark"><?= $escaper->escapeHtml(__('Dark')) ?></span>
+                <span class="hidden sm:inline" x-show="dark"><?= $escaper->escapeHtml(__('Light')) ?></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ── Main header ── -->
+<div x-show="fixed" :style="'height:' + headerH + 'px'"></div>
+<header x-ref="mainHeader" :class="fixed ? 'fixed inset-x-0 top-0 z-50' : 'relative'" class="bg-[var(--color-bg)] border-b border-[var(--color-border)] shadow-sm">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] relative flex items-center gap-2 sm:gap-3 py-2 sm:py-2.5 md:py-3">
+
+            <!-- Logo -->
+            <a class="absolute left-1/2 -translate-x-1/2 sm:static sm:translate-x-0 sm:left-auto shrink-0 no-underline leading-none" href="<?= $escaper->escapeUrl($block->getUrl('')) ?>" aria-label="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics — Homepage')) ?>">
+                <img
+                    class="block h-11 w-auto max-w-[160px] sm:h-12 sm:max-w-[210px] lg:h-14 lg:max-w-[250px] dark:hidden"
+                    src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/logo-light.svg')) ?>"
+                    alt="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics')) ?>"
+                    width="220" height="44"
+                />
+                <img
+                    class="hidden h-11 w-auto max-w-[160px] sm:h-12 sm:max-w-[210px] lg:h-14 lg:max-w-[250px] dark:block"
+                    src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/logo-dark.svg')) ?>"
+                    alt="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics')) ?>"
+                    width="220" height="44"
+                />
+            </a>
+
+            <!-- Search bar (sm+) -->
+            <form
+                class="hidden sm:flex flex-1 min-w-0 items-stretch"
+                action="<?= $catalogSearchUrl ?>"
+                method="get"
+            >
+                <input type="hidden" name="vehicle" :value="mainVehicleLabel()">
+                <label for="tb-search-input" class="sr-only"><?= $escaper->escapeHtml(__('Search')) ?></label>
+                <input
+                    id="tb-search-input"
+                    type="search"
+                    name="q"
+                    class="flex-1 min-w-0 border border-r-0 border-[var(--color-border)] rounded-l-[var(--radius-input)] bg-[var(--color-surface)] text-[var(--color-text)] px-3 h-10 text-sm focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10 transition-colors placeholder:text-[var(--color-muted)]"
+                    placeholder="<?= $escaper->escapeHtmlAttr(__('Search parts, accessories, clothing...')) ?>"
+                    autocomplete="off"
+                />
+                <button
+                    type="submit"
+                    class="shrink-0 flex items-center justify-center bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] border border-[var(--color-accent)] hover:border-[var(--color-accent-hover)] text-white px-3 h-10 rounded-r-[var(--radius-button)] transition-colors"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+            </form>
+
+            <!-- Action buttons (always visible) -->
+            <div class="flex items-center gap-1.5 sm:gap-2 ml-auto sm:ml-0 shrink-0">
+
+                <button
+                    type="button"
+                    class="flex h-10 items-center gap-2 border border-[var(--color-border)] bg-[var(--color-surface)] px-2.5 text-left text-[var(--color-text)] transition-colors hover:border-[var(--color-accent)] sm:px-3"
+                    @click="garageOpen = true"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Open your vehicle garage')) ?>"
+                >
+                    <span class="inline-flex h-7 w-7 items-center justify-center border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l2-5h14l2 5"/><path d="M5 11h14v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="15.5" r="1"/><circle cx="16.5" cy="15.5" r="1"/></svg>
+                    </span>
+                    <span class="hidden min-w-0 sm:flex sm:flex-col sm:leading-tight">
+                        <span class="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500">
+                            <?= $escaper->escapeHtml(__('Your vehicle')) ?>
+                        </span>
+                        <span class="max-w-[10.5rem] truncate text-sm font-semibold" x-text="mainVehicleLabel() || '<?= $escaper->escapeJs(__('Set your scooter')) ?>'"></span>
+                    </span>
+                    <span
+                        class="hidden border border-zinc-200 bg-zinc-50 px-1.5 py-0.5 text-[0.68rem] font-bold text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300 sm:inline"
+                        x-text="garageCount()"
+                    ></span>
+                </button>
+
+                <!-- Mobile search toggle (xs only) -->
+                <button
+                    type="button"
+                    class="sm:hidden flex items-center justify-center w-10 h-10 rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:border-[var(--color-accent)] transition-colors"
+                    @click="$dispatch('tb-search-toggle')"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Open search')) ?>"
+                >
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                </button>
+
+                <!-- Cart -->
+                <a
+                    class="flex items-center justify-center gap-1.5 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white border border-[var(--color-accent)] hover:border-[var(--color-accent-hover)] px-3 h-10 rounded-[var(--radius-button)] font-semibold text-sm transition-colors no-underline whitespace-nowrap"
+                    href="<?= $escaper->escapeUrl($block->getUrl('checkout/cart')) ?>"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Shopping Cart')) ?>"
+                >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    <span class="hidden xs:inline"><?= $escaper->escapeHtml(__('Cart')) ?></span>
+                </a>
+
+                <!-- Hamburger (hidden on desktop) -->
+                <button
+                    type="button"
+                    class="lg:hidden flex items-center justify-center w-10 h-10 rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)] hover:border-[var(--color-accent)] transition-colors"
+                    @click="$dispatch('tb-nav-toggle')"
+                    aria-label="<?= $escaper->escapeHtmlAttr(__('Toggle navigation')) ?>"
+                >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+
+            </div>
+        </div>
+
+        <!-- Mobile search row (xs only, slides in) -->
+        <div
+            class="sm:hidden overflow-hidden"
+            x-data="{ searchOpen: false }"
+            @tb-search-toggle.window="searchOpen = !searchOpen"
+            x-show="searchOpen"
+            x-transition:enter="transition ease-out duration-150"
+            x-transition:enter-start="opacity-0 -translate-y-1"
+            x-transition:enter-end="opacity-100 translate-y-0"
+            x-transition:leave="transition ease-in duration-100"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+        >
+            <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] pb-3">
+                <form class="flex" action="<?= $catalogSearchUrl ?>" method="get">
+                    <input type="hidden" name="vehicle" :value="mainVehicleLabel()">
+                    <label for="tb-search-mobile" class="sr-only"><?= $escaper->escapeHtml(__('Search')) ?></label>
+                    <input
+                        id="tb-search-mobile"
+                        type="search"
+                        name="q"
+                        class="flex-1 min-w-0 border border-r-0 border-[var(--color-border)] rounded-l-[var(--radius-input)] bg-[var(--color-surface)] text-[var(--color-text)] px-3 h-10 text-sm focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10 transition-colors placeholder:text-[var(--color-muted)]"
+                        placeholder="<?= $escaper->escapeHtmlAttr(__('Search parts...')) ?>"
+                        autocomplete="off"
+                        x-effect="searchOpen && $nextTick(() => $el.focus())"
+                    />
+                    <button
+                        type="submit"
+                        class="shrink-0 flex items-center justify-center bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] border border-[var(--color-accent)] text-white px-4 h-10 rounded-r-[var(--radius-button)] transition-colors"
+                        aria-label="<?= $escaper->escapeHtmlAttr(__('Search')) ?>"
+                    >
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Desktop nav (lg+) -->
+        <nav class="hidden lg:block border-t border-[var(--color-border)]" aria-label="<?= $escaper->escapeHtmlAttr(__('Primary Navigation')) ?>">
+            <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%]">
+                <?= /* @noEscape */ $block->getChildHtml('thunderbolt.desktop.menu') ?>
+            </div>
+        </nav>
+
+        <div x-show="mainVehicleLabel()" class="border-t border-[var(--color-border)] bg-zinc-50/90 dark:bg-zinc-900/60">
+            <div class="mx-auto flex w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] flex-col gap-2 py-2.5 sm:flex-row sm:items-center sm:justify-between">
+                <div class="flex items-center gap-2 text-sm text-zinc-700 dark:text-zinc-200">
+                    <span class="inline-flex h-7 w-7 items-center justify-center border border-zinc-200 bg-white text-zinc-700 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l2-5h14l2 5"/><path d="M5 11h14v7a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1z"/><circle cx="7.5" cy="15.5" r="1"/><circle cx="16.5" cy="15.5" r="1"/></svg>
+                    </span>
+                    <span class="font-semibold"><?= $escaper->escapeHtml(__('Active vehicle:')) ?></span>
+                    <span class="font-bold text-zinc-950 dark:text-white" x-text="mainVehicleLabel()"></span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button type="button" class="border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-700 transition-colors hover:border-zinc-300 hover:text-zinc-950 dark:border-zinc-700 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:border-zinc-600 dark:hover:text-white" @click="garageOpen = true">
+                        <?= $escaper->escapeHtml(__('Change vehicle')) ?>
+                    </button>
+                    <button type="button" class="bg-zinc-950 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent)] dark:bg-white dark:text-zinc-950" @click="browseMainVehicle()">
+                        <?= $escaper->escapeHtml(__('Browse for this scooter')) ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+</header>
+
+<div
+    x-show="garageOpen"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0"
+    x-transition:enter-end="opacity-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100"
+    x-transition:leave-end="opacity-0"
+    class="fixed inset-0 z-[70] bg-zinc-950/45 backdrop-blur-[2px]"
+    @click="garageOpen = false"
+></div>
+
+<aside
+    x-show="garageOpen"
+    x-transition:enter="transition ease-out duration-250"
+    x-transition:enter-start="translate-x-full opacity-0"
+    x-transition:enter-end="translate-x-0 opacity-100"
+    x-transition:leave="transition ease-in duration-180"
+    x-transition:leave-start="translate-x-0 opacity-100"
+    x-transition:leave-end="translate-x-full opacity-0"
+    class="fixed right-0 top-0 z-[80] flex h-screen w-full max-w-md flex-col border-l border-zinc-200 bg-white text-zinc-950 shadow-2xl dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
+    aria-label="<?= $escaper->escapeHtmlAttr(__('Your vehicles')) ?>"
+>
+    <div class="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
+        <div class="flex items-start justify-between gap-4">
+            <div>
+                <p class="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Garage')) ?></p>
+                <h2 class="mt-2 text-2xl font-black tracking-tight"><?= $escaper->escapeHtml(__('Your vehicles')) ?></h2>
+                <p class="mt-2 max-w-sm text-sm text-zinc-600 dark:text-zinc-400">
+                    <?= $escaper->escapeHtml(__('Save up to 5 vehicles. Pick one as main to keep search and fitment focused.')) ?>
+                </p>
+            </div>
+            <button
+                type="button"
+                class="inline-flex h-10 w-10 items-center justify-center border border-zinc-200 bg-zinc-50 text-zinc-700 transition-colors hover:border-zinc-300 hover:bg-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-zinc-700"
+                @click="garageOpen = false"
+                aria-label="<?= $escaper->escapeHtmlAttr(__('Close garage')) ?>"
+            >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800" x-show="mainVehicleLabel()">
+        <div class="border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50">
+            <p class="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Main vehicle')) ?></p>
+            <div class="mt-2 flex items-start justify-between gap-3">
+                <div>
+                    <p class="text-lg font-black tracking-tight" x-text="mainVehicleLabel()"></p>
+                    <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400"><?= $escaper->escapeHtml(__('Use this scooter as your default context when searching parts and upgrades.')) ?></p>
+                </div>
+                <button type="button" class="shrink-0 bg-zinc-950 px-3 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-accent)] dark:bg-white dark:text-zinc-950" @click="browseMainVehicle()">
+                    <?= $escaper->escapeHtml(__('Browse now')) ?>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-b border-zinc-200 px-5 py-4 dark:border-zinc-800">
+        <div class="mt-3 flex gap-2 overflow-x-auto pb-1">
+            <template x-for="(label, idx) in ['1 Type', '2 Manufacturer', '3 Model', '4 Engine', '5 Year']" :key="label">
+                <span
+                    class="shrink-0 border px-2.5 py-1 text-[0.68rem] font-bold uppercase tracking-[0.18em]"
+                    :class="currentStep() >= (idx + 1) ? 'border-zinc-950 bg-zinc-950 text-white dark:border-white dark:bg-white dark:text-zinc-950' : 'border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400'"
+                    x-text="label"
+                ></span>
+            </template>
+        </div>
+
+        <div class="mt-3 space-y-3">
+            <div>
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Step 1: Type')) ?></label>
+                <select
+                    x-model="draftVehicle.type"
+                    @change="setType($event.target.value)"
+                    class="w-full border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-950 outline-none transition-colors focus:border-[var(--color-accent)] dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                >
+                    <option value=""><?= $escaper->escapeHtml(__('Choose type')) ?></option>
+                    <template x-for="vehicleType in vehicleTypes" :key="vehicleType">
+                        <option :value="vehicleType" x-text="vehicleType"></option>
+                    </template>
+                </select>
+            </div>
+
+            <div x-show="currentStep() >= 1">
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Step 2: Manufacturer')) ?></label>
+                <select
+                    x-model="draftVehicle.manufacturer"
+                    @change="setManufacturer($event.target.value)"
+                    class="w-full border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-950 outline-none transition-colors focus:border-[var(--color-accent)] dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                >
+                    <option value=""><?= $escaper->escapeHtml(__('Choose manufacturer')) ?></option>
+                    <template x-for="manufacturer in manufacturers()" :key="manufacturer">
+                        <option :value="manufacturer" x-text="manufacturer"></option>
+                    </template>
+                </select>
+            </div>
+
+            <div x-show="draftVehicle.manufacturer !== ''">
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Step 3: Model')) ?></label>
+                <select
+                    x-model="draftVehicle.model"
+                    @change="setModel($event.target.value)"
+                    class="w-full border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-950 outline-none transition-colors focus:border-[var(--color-accent)] dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                >
+                    <option value=""><?= $escaper->escapeHtml(__('Choose model')) ?></option>
+                    <template x-for="model in models()" :key="model">
+                        <option :value="model" x-text="model"></option>
+                    </template>
+                </select>
+            </div>
+
+            <div x-show="draftVehicle.model !== ''">
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Step 4: Engine / CC')) ?></label>
+                <select
+                    x-model="draftVehicle.engine"
+                    @change="setEngine($event.target.value)"
+                    class="w-full border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-950 outline-none transition-colors focus:border-[var(--color-accent)] dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                >
+                    <option value=""><?= $escaper->escapeHtml(__('Choose engine')) ?></option>
+                    <template x-for="engine in engines()" :key="engine">
+                        <option :value="engine" x-text="engine"></option>
+                    </template>
+                </select>
+            </div>
+
+            <div x-show="draftVehicle.engine !== ''">
+                <label class="mb-1 block text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500"><?= $escaper->escapeHtml(__('Step 5: Build year')) ?></label>
+                <div class="flex gap-2">
+                    <select
+                        x-model="draftVehicle.year"
+                        class="min-w-0 flex-1 border border-zinc-300 bg-white px-3 py-3 text-sm text-zinc-950 outline-none transition-colors focus:border-[var(--color-accent)] dark:border-zinc-700 dark:bg-zinc-950 dark:text-white"
+                    >
+                        <option value=""><?= $escaper->escapeHtml(__('Choose year')) ?></option>
+                        <template x-for="year in years()" :key="year">
+                            <option :value="year" x-text="year"></option>
+                        </template>
+                    </select>
+                    <button
+                        type="button"
+                        class="shrink-0 bg-zinc-950 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-[var(--color-accent)] disabled:cursor-not-allowed disabled:opacity-50 dark:bg-white dark:text-zinc-950"
+                        @click="addVehicle()"
+                        :disabled="!canAddVehicle()"
+                    >
+                        <?= $escaper->escapeHtml(__('Add')) ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <p class="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <span x-text="garageCount()"></span>/5 <?= $escaper->escapeHtml(__('vehicles saved')) ?>
+            <span class="mx-1">·</span>
+            <?= $escaper->escapeHtml(__('Selections narrow down automatically per previous step.')) ?>
+        </p>
+    </div>
+
+    <div class="flex-1 overflow-y-auto px-5 py-5">
+        <template x-if="!garageCount()">
+            <div class="border border-dashed border-zinc-300 bg-zinc-50 px-4 py-5 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900/50 dark:text-zinc-400">
+                <?= $escaper->escapeHtml(__('No vehicles saved yet. Add your scooter to make search and catalog browsing feel more personal.')) ?>
+            </div>
+        </template>
+
+        <div class="mb-4 flex items-center justify-between gap-3" x-show="garageCount()">
+            <p class="text-sm text-zinc-500 dark:text-zinc-400"><?= $escaper->escapeHtml(__('Keep one vehicle as your default and switch when needed.')) ?></p>
+            <button type="button" class="border border-zinc-200 bg-white px-3 py-2 text-sm font-semibold text-zinc-600 transition-colors hover:border-red-300 hover:text-red-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:border-red-900 dark:hover:text-red-300" @click="clearGarage()">
+                <?= $escaper->escapeHtml(__('Clear all')) ?>
+            </button>
+        </div>
+
+        <div class="space-y-3" x-show="garageCount()">
+            <template x-for="vehicle in vehicles" :key="vehicle.id">
+                <div class="border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <p class="truncate text-base font-bold" x-text="vehicle.name"></p>
+                                <span
+                                    x-show="activeVehicleId === vehicle.id"
+                                    class="border border-emerald-300 bg-emerald-50 px-2 py-0.5 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-300"
+                                >
+                                    <?= $escaper->escapeHtml(__('Main')) ?>
+                                </span>
+                            </div>
+                            <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+                                <span x-text="vehicle.manufacturer && vehicle.model ? vehicle.manufacturer + ' / ' + vehicle.model : '<?= $escaper->escapeJs(__('Use this vehicle to guide future search, fitment and product discovery.')) ?>'"></span>
+                            </p>
+                            <p class="mt-2 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-zinc-400 dark:text-zinc-500" x-text="vehicleMeta(vehicle)"></p>
+                        </div>
+                        <button
+                            type="button"
+                            class="inline-flex h-9 w-9 items-center justify-center border border-zinc-200 bg-zinc-50 text-zinc-600 transition-colors hover:border-red-300 hover:bg-red-50 hover:text-red-700 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-red-900 dark:hover:bg-red-950/30 dark:hover:text-red-300"
+                            @click="removeVehicle(vehicle.id)"
+                            aria-label="<?= $escaper->escapeHtmlAttr(__('Remove vehicle')) ?>"
+                        >
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                        </button>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between gap-3">
+                        <span class="text-[0.72rem] font-bold uppercase tracking-[0.22em] text-zinc-400 dark:text-zinc-500">
+                            <?= $escaper->escapeHtml(__('Garage slot')) ?>
+                        </span>
+                        <button
+                            type="button"
+                            class="border px-3 py-2 text-sm font-semibold transition-colors"
+                            :class="activeVehicleId === vehicle.id ? 'border-zinc-200 bg-zinc-100 text-zinc-400 cursor-default dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-500' : 'border-zinc-950 bg-zinc-950 text-white hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] dark:border-white dark:bg-white dark:text-zinc-950'"
+                            @click="setMainVehicle(vehicle.id)"
+                            :disabled="activeVehicleId === vehicle.id"
+                        >
+                            <span x-text="activeVehicleId === vehicle.id ? '<?= $escaper->escapeJs(__('Main vehicle')) ?>' : '<?= $escaper->escapeJs(__('Set as main')) ?>'"></span>
+                        </button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</aside>
+</div>
+
+<!-- Mobile nav panel (outside sticky so it flows below header) -->
+<?= /* @noEscape */ $block->getChildHtml('thunderbolt.mobile.menu') ?>

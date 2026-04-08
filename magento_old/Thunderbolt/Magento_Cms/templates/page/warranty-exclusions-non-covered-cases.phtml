@@ -1,0 +1,34 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('Warranty Exclusions & Non-Covered Cases')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('This reference explains common scenarios that typically fall outside warranty coverage.')) ?></p>
+
+        <div class="mt-5 grid gap-3 md:grid-cols-2">
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('Incorrect installation')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Damage from improper fitment, missing steps or wrong torque values is usually non-covered.')) ?></p>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('Racing or extreme use')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Competition use and abnormal load profiles can invalidate standard warranty conditions.')) ?></p>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('Consumable wear')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Normal wear items are treated as maintenance, not defect claims.')) ?></p>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('Unauthorized modifications')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Post-purchase modifications that alter intended use may void claim eligibility.')) ?></p>
+            </div>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-2 text-sm">
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('warranty-claim-checklist')) ?>"><?= $escaper->escapeHtml(__('Warranty Claim Checklist')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('returns-warranty')) ?>"><?= $escaper->escapeHtml(__('Returns & Warranty')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"><?= $escaper->escapeHtml(__('Discuss your case with support')) ?></a>
+        </div>
+    </div>
+</section>

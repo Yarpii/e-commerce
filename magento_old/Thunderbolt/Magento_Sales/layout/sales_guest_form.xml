@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="sales-guest-form"/>
+
+        <!-- Remove default guest form block and page title -->
+        <referenceBlock name="guest.form.orders" remove="true"/>
+        <referenceBlock name="page.main.title" remove="true"/>
+
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\Guest\Form" name="thunderbolt.sales.guest.form" template="Magento_Sales::guest/form.phtml" before="-"/>
+        </referenceContainer>
+    </body>
+</page>

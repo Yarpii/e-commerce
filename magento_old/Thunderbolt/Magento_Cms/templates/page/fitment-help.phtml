@@ -1,0 +1,14 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('Fitment Help')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('Use this guide when checking if a part fits your scooter setup. For uncertain cases, contact support before ordering.')) ?></p>
+        <div class="mt-5 grid gap-4 md:grid-cols-3">
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold">1. Vehicle data</p><p class="mt-1 text-sm text-[var(--color-muted)]">Brand, model, engine, year.</p></div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold">2. Part context</p><p class="mt-1 text-sm text-[var(--color-muted)]">OEM code, version, bundle dependencies.</p></div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><p class="font-semibold">3. Confirm before install</p><p class="mt-1 text-sm text-[var(--color-muted)]">Visual match and technical notes.</p></div>
+        </div>
+    </div>
+</section>

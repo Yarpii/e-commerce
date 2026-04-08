@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="cms-sale"/>
+
+        <referenceBlock name="cms_page" remove="true"/>
+
+        <referenceContainer name="main">
+            <block class="Magento\Framework\View\Element\Template" name="thunderbolt.sale.landing" template="Magento_Cms::page/sale-builder.phtml" before="-">
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.sale.hero" as="sale_hero" template="Magento_Cms::page/sale/hero.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.sale.deals" as="sale_deals" template="Magento_Cms::page/sale/deals.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.sale.highlights" as="sale_highlights" template="Magento_Cms::page/sale/highlights.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.sale.cta" as="sale_cta" template="Magento_Cms::page/sale/cta.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

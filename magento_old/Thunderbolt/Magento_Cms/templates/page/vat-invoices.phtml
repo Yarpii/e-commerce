@@ -1,0 +1,33 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('VAT & Invoices')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('Invoice and tax handling can differ by destination, store setup and customer type (consumer or business).')) ?></p>
+
+        <div class="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('EU B2C')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Final checkout totals include applicable VAT rules for the destination market.')) ?></p>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('EU B2B')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Business account validation may be required for reverse-charge or dedicated invoice handling.')) ?></p>
+            </div>
+            <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+                <p class="font-semibold"><?= $escaper->escapeHtml(__('Non-EU')) ?></p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Import VAT and duties can be collected by customs or carrier depending on lane and service.')) ?></p>
+            </div>
+        </div>
+
+        <div class="mt-6 rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4">
+            <h2 class="text-lg font-bold text-[var(--color-text)]"><?= $escaper->escapeHtml(__('Need invoice adjustments?')) ?></h2>
+            <p class="mt-2 text-sm text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Share your order number, legal entity details and request reason. Our team will verify what can be updated under accounting rules.')) ?></p>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('customs-duties-faq')) ?>"><?= $escaper->escapeHtml(__('Open Customs & Duties FAQ')) ?></a>
+                <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('b2b-contact-intake')) ?>"><?= $escaper->escapeHtml(__('B2B invoice request')) ?></a>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" src_type="url"/>
+        <css src="css/source/_tailwind.css"/>
+        <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.9/dist/cdn.min.js" src_type="url" defer="defer"/>
+    </head>
+    <body>
+        <!-- Remove Magento Blank header/footer fragments that duplicate search, links and nav -->
+        <referenceContainer name="header.panel" remove="true"/>
+        <referenceContainer name="header-wrapper" remove="true"/>
+        <referenceBlock name="logo" remove="true"/>
+        <referenceBlock name="top.search" remove="true"/>
+        <referenceBlock name="header.links" remove="true"/>
+        <referenceBlock name="minicart" remove="true"/>
+        <referenceBlock name="catalog.topnav" remove="true"/>
+        <referenceBlock name="store.menu" remove="true"/>
+        <referenceBlock name="navigation.sections" remove="true"/>
+        <referenceBlock name="store.links" remove="true"/>
+        <referenceBlock name="top.links" remove="true"/>
+        <referenceBlock name="footer" remove="true"/>
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="report.bugs" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+
+        <move element="breadcrumbs" destination="columns.top" before="-"/>
+        <referenceBlock name="breadcrumbs">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Magento_Theme::html/breadcrumbs.phtml</argument>
+            </action>
+        </referenceBlock>
+
+        <referenceContainer name="header.container">
+            <block class="Magento\Framework\View\Element\Template" name="thunderbolt.header" template="Magento_Theme::html/header.phtml" before="-">
+                <block class="Magento\Theme\Block\Html\Topmenu" name="thunderbolt.desktop.menu" template="Magento_Theme::html/topmenu.phtml"/>
+                <block class="Magento\Theme\Block\Html\Topmenu" name="thunderbolt.mobile.menu" template="Magento_Theme::html/nav-mobile.phtml"/>
+            </block>
+        </referenceContainer>
+
+        <referenceContainer name="footer-container">
+            <block class="Magento\Framework\View\Element\Template" name="thunderbolt.footer" template="Magento_Theme::html/footer.phtml" before="-">
+                <block class="Magento\Store\Block\Switcher" name="thunderbolt.footer.store_switcher" as="footer.store_switcher" template="Magento_Store::switch/stores.phtml"/>
+                <block class="Magento\Directory\Block\Currency" name="thunderbolt.footer.currency_switcher" as="footer.currency_switcher" template="Magento_Directory::currency.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

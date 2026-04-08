@@ -1,0 +1,178 @@
+<?php
+/** @var \Magento\Store\Block\Switcher $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$stores = $block->getStores();
+if (!is_array($stores)) {
+    $stores = [];
+}
+
+$toFlag = static function (string $country): string {
+    $country = strtoupper($country);
+    if (strlen($country) !== 2 || !ctype_alpha($country)) {
+        return '🌐';
+    }
+
+    $first = mb_chr(0x1F1E6 + (ord($country[0]) - ord('A')), 'UTF-8');
+    $second = mb_chr(0x1F1E6 + (ord($country[1]) - ord('A')), 'UTF-8');
+
+    return $first . $second;
+};
+
+$normalizeCountry = static function (string $value): ?string {
+    $value = strtoupper(trim($value));
+    if (strlen($value) !== 2 || !ctype_alpha($value)) {
+        return null;
+    }
+
+    $aliases = [
+        'UK' => 'GB',
+        'EL' => 'GR',
+        'EN' => 'GB',
+    ];
+
+    return $aliases[$value] ?? $value;
+};
+
+$countryFromLocale = static function (string $localeCode) use ($normalizeCountry): ?string {
+    $parts = preg_split('/[_-]/', $localeCode) ?: [];
+    return $normalizeCountry((string)($parts[1] ?? ''));
+};
+
+$countryFromStoreCode = static function (string $storeCode) use ($normalizeCountry): ?string {
+    $parts = preg_split('/[^a-zA-Z]+/', $storeCode) ?: [];
+    $parts = array_values(array_filter($parts, static fn($part) => $part !== ''));
+
+    if ($parts === []) {
+        return null;
+    }
+
+    $languageFallback = [
+        'EN' => 'GB',
+        'NL' => 'NL',
+        'DE' => 'DE',
+        'FR' => 'FR',
+        'ES' => 'ES',
+        'IT' => 'IT',
+        'PL' => 'PL',
+        'PT' => 'PT',
+        'SV' => 'SE',
+        'NO' => 'NO',
+        'DA' => 'DK',
+        'FI' => 'FI',
+        'CS' => 'CZ',
+        'HU' => 'HU',
+        'RO' => 'RO',
+        'BG' => 'BG',
+        'EL' => 'GR',
+        'TR' => 'TR',
+        'RU' => 'RU',
+        'UK' => 'UA',
+        'JA' => 'JP',
+        'KO' => 'KR',
+        'ZH' => 'CN',
+        'AR' => 'SA',
+    ];
+
+    for ($i = count($parts) - 1; $i >= 0; $i--) {
+        $token = strtoupper($parts[$i]);
+        $country = $normalizeCountry($token);
+        if ($country !== null) {
+            return $country;
+        }
+
+        if (isset($languageFallback[$token])) {
+            return $languageFallback[$token];
+        }
+    }
+
+    return null;
+};
+
+$countryFromStoreName = static function (string $storeName): ?string {
+    $name = strtolower($storeName);
+    $keywordMap = [
+        'netherlands' => 'NL',
+        'holland' => 'NL',
+        'belgium' => 'BE',
+        'germany' => 'DE',
+        'deutschland' => 'DE',
+        'france' => 'FR',
+        'spain' => 'ES',
+        'italy' => 'IT',
+        'portugal' => 'PT',
+        'poland' => 'PL',
+        'sweden' => 'SE',
+        'norway' => 'NO',
+        'denmark' => 'DK',
+        'finland' => 'FI',
+        'austria' => 'AT',
+        'switzerland' => 'CH',
+        'united kingdom' => 'GB',
+        'england' => 'GB',
+        'ireland' => 'IE',
+        'united states' => 'US',
+        'usa' => 'US',
+        'canada' => 'CA',
+        'australia' => 'AU',
+        'japan' => 'JP',
+        'korea' => 'KR',
+        'china' => 'CN',
+    ];
+
+    foreach ($keywordMap as $needle => $country) {
+        if (strpos($name, $needle) !== false) {
+            return $country;
+        }
+    }
+
+    return null;
+};
+
+$resolveCountry = static function ($store) use ($countryFromStoreCode, $countryFromStoreName, $countryFromLocale): string {
+    $storeCode = (string)$store->getCode();
+    $storeName = (string)$store->getName();
+    $locale = (string)$store->getConfig('general/locale/code');
+
+    $fromCode = $countryFromStoreCode($storeCode);
+    if ($fromCode !== null) {
+        return $fromCode;
+    }
+
+    $fromName = $countryFromStoreName($storeName);
+    if ($fromName !== null) {
+        return $fromName;
+    }
+
+    return $countryFromLocale($locale) ?? 'US';
+};
+?>
+<?php if (count($stores) <= 1): ?>
+    <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+        <?= $escaper->escapeHtml(__('Er is momenteel maar één taal/land actief op deze store view.')) ?>
+    </div>
+<?php endif; ?>
+
+<ul class="space-y-2" aria-label="<?= $escaper->escapeHtmlAttr(__('Beschikbare talen en landen')) ?>">
+    <?php foreach ($stores as $store): ?>
+        <?php
+        $country = $resolveCountry($store);
+        $flag = $toFlag($country);
+        $isCurrent = (int)$store->getId() === (int)$block->getCurrentStoreId();
+        ?>
+        <li>
+            <?php if ($isCurrent): ?>
+                <span class="inline-flex w-full items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300" aria-current="page">
+                    <span aria-hidden="true"><?= $escaper->escapeHtml($flag) ?></span>
+                    <span><?= $escaper->escapeHtml($store->getName()) ?></span>
+                </span>
+            <?php else: ?>
+                <a href="#"
+                   class="inline-flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-red-700 dark:hover:text-red-300"
+                   data-post='<?= /* @noEscape */ $block->getTargetStorePostData($store) ?>'>
+                    <span aria-hidden="true"><?= $escaper->escapeHtml($flag) ?></span>
+                    <span><?= $escaper->escapeHtml($store->getName()) ?></span>
+                </a>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>

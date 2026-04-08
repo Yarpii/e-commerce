@@ -1,0 +1,18 @@
+@import "./_variables.css";
+@import "./_404.css";
+@import "./_base.css";
+@import "./_catalog.css";
+@import "./_catalogsearch.css";
+@import "./_contact.css";
+@import "./_cookie-policy.css";
+@import "./_customer.css";
+@import "./_footer.css";
+@import "./_guest.css";
+@import "./_header.css";
+@import "./_landing.css";
+@import "./_sale.css";
+@import "./_sidebar.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

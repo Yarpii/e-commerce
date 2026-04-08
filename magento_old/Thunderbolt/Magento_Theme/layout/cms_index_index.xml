@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <attribute name="class" value="cms-home"/>
+
+        <!-- Hide default CMS "Home Page" content block -->
+        <referenceBlock name="cms_page" remove="true"/>
+
+        <referenceContainer name="main">
+            <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.landing" template="Magento_Cms::page/landing-builder.phtml" before="-">
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.hero" as="hero" template="Magento_Cms::page/landing/hero.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.brand.finder" as="brand_finder" template="Magento_Cms::page/landing/brand-finder.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.brand.strip" as="brand_strip" template="Magento_Cms::page/landing/brand-strip.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.trust" as="trust" template="Magento_Cms::page/landing/trust.phtml"/>
+                <block class="Magento\Catalog\Block\Navigation" name="thunderbolt.home.featured.categories" as="featured_categories" template="Magento_Cms::page/landing/featured-categories.phtml"/>
+                <!-- product_sections_top: Best selling + Fresh arrivals (2 rows each) -->
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.product.sections.top" as="product_sections_top" template="Magento_Cms::page/landing/product-sections.phtml">
+                    <arguments>
+                        <argument name="sections" xsi:type="array">
+                            <item name="section_1" xsi:type="array">
+                                <item name="title" xsi:type="string">Best selling parts</item>
+                                <item name="subtitle" xsi:type="string">Popular picks riders choose every week</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                            <item name="section_2" xsi:type="array">
+                                <item name="title" xsi:type="string">Fresh arrivals</item>
+                                <item name="subtitle" xsi:type="string">Latest additions for upgrades and maintenance</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <!-- ad banner 1 -->
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.ad.banner" as="ad_banner" template="Magento_Cms::page/landing/ad-banner.phtml"/>
+                <!-- product_sections_mid: Rider essentials + Workshop must-haves (2 rows each) -->
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.product.sections.mid" as="product_sections_mid" template="Magento_Cms::page/landing/product-sections.phtml">
+                    <arguments>
+                        <argument name="sections" xsi:type="array">
+                            <item name="section_3" xsi:type="array">
+                                <item name="title" xsi:type="string">Rider essentials</item>
+                                <item name="subtitle" xsi:type="string">Gear and accessories for every daily ride</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                            <item name="section_4" xsi:type="array">
+                                <item name="title" xsi:type="string">Workshop must-haves</item>
+                                <item name="subtitle" xsi:type="string">Tools and service items for home mechanics</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <!-- ad banner 2 -->
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.ad.banner.2" as="ad_banner_2" template="Magento_Cms::page/landing/ad-banner.phtml"/>
+                <!-- product_sections_bottom: Weekend picks + Top rated (2 rows each) -->
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.product.sections.bottom" as="product_sections_bottom" template="Magento_Cms::page/landing/product-sections.phtml">
+                    <arguments>
+                        <argument name="sections" xsi:type="array">
+                            <item name="section_5" xsi:type="array">
+                                <item name="title" xsi:type="string">Weekend upgrade picks</item>
+                                <item name="subtitle" xsi:type="string">Quick upgrades with high impact</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                            <item name="section_6" xsi:type="array">
+                                <item name="title" xsi:type="string">Top rated gear</item>
+                                <item name="subtitle" xsi:type="string">Highest rated by riders like you</item>
+                                <item name="limit" xsi:type="number">6</item>
+                                <item name="rows" xsi:type="number">2</item>
+                                <item name="product_ids" xsi:type="string"></item>
+                                <item name="category_id" xsi:type="string"></item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.how.it.works" as="how_it_works" template="Magento_Cms::page/landing/how-it-works.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.why.us" as="why_us" template="Magento_Cms::page/landing/why-us.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.testimonials" as="testimonials" template="Magento_Cms::page/landing/testimonials.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="thunderbolt.home.cta.bottom" as="cta_bottom" template="Magento_Cms::page/landing/cta-bottom.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

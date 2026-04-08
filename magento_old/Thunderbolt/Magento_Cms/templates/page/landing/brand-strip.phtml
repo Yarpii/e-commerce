@@ -1,0 +1,75 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$brandsDir = dirname(__DIR__, 4) . '/web/images/brands';
+$logoFiles = [];
+if (is_dir($brandsDir)) {
+    $patterns = ['*.png', '*.jpg', '*.jpeg', '*.webp', '*.svg'];
+    foreach ($patterns as $pattern) {
+        $matches = glob($brandsDir . '/' . $pattern) ?: [];
+        foreach ($matches as $filePath) {
+            $logoFiles[] = basename($filePath);
+        }
+    }
+}
+
+natsort($logoFiles);
+$logoFiles = array_values(array_unique($logoFiles));
+
+$brandItems = [];
+$seenBrands = [];
+foreach ($logoFiles as $fileName) {
+    $baseName = pathinfo($fileName, PATHINFO_FILENAME);
+    $pretty = preg_replace('/\s*\(\d+\)$/', '', $baseName);
+    $pretty = str_replace(['_', '-'], ' ', $pretty);
+    $pretty = trim(preg_replace('/\s+/', ' ', $pretty));
+    if ($pretty === '') {
+        continue;
+    }
+
+    $brandName = ucwords($pretty);
+    $key = strtolower(preg_replace('/[^a-z0-9]+/', '', $brandName));
+    if ($key === '' || isset($seenBrands[$key])) {
+        continue;
+    }
+    $seenBrands[$key] = true;
+
+    $encodedFileName = rawurlencode($fileName);
+    $brandItems[] = [
+        'name' => $brandName,
+        'logo' => $block->getViewFileUrl('images/brands/' . $encodedFileName),
+    ];
+}
+
+if ($brandItems === []) {
+    $fallbackBrands = ['Vespa', 'Piaggio', 'Honda', 'Yamaha', 'Aprilia', 'Kymco', 'Sym', 'Suzuki', 'Gilera', 'Peugeot'];
+    foreach ($fallbackBrands as $brandName) {
+        $brandItems[] = ['name' => $brandName, 'logo' => ''];
+    }
+}
+
+shuffle($brandItems);
+$track = array_merge($brandItems, $brandItems);
+?>
+<div class="w-full">
+    <div class="sd-brand-strip relative overflow-hidden bg-zinc-100/80 py-4 md:py-5 dark:bg-zinc-900/40" role="marquee" aria-label="<?= $escaper->escapeHtmlAttr(__('Supported scooter brands')) ?>">
+        <div class="sd-brand-strip__track flex min-w-max items-center gap-3 px-4 md:px-6">
+            <?php foreach ($track as $item): ?>
+                <a class="inline-flex h-11 min-w-[7.75rem] shrink-0 items-center justify-center rounded-full border border-[var(--color-border)] bg-[var(--color-bg)] px-5 text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:h-12 md:min-w-[8.75rem] md:text-base"
+                   href="<?= $escaper->escapeUrl('/catalogsearch/result/?q=' . urlencode($item['name'])) ?>"
+                   title="<?= $escaper->escapeHtmlAttr(__('Shop %1 parts', $item['name'])) ?>">
+                    <?php if ($item['logo'] !== ''): ?>
+                        <img
+                            class="h-5 w-auto max-w-[6.5rem] object-contain md:h-6 md:max-w-[7.25rem]"
+                            src="<?= $escaper->escapeUrl($item['logo']) ?>"
+                            alt="<?= $escaper->escapeHtmlAttr($item['name']) ?>"
+                            loading="lazy"
+                        />
+                    <?php else: ?>
+                        <?= $escaper->escapeHtml($item['name']) ?>
+                    <?php endif; ?>
+                </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>

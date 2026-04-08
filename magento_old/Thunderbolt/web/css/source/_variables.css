@@ -1,0 +1,36 @@
+:root {
+    --color-accent: #ff2d37;
+    --color-accent-hover: #e0232c;
+    --color-bg: #f8f9fb;
+    --color-text: #1a1a2e;
+    --color-surface: #ffffff;
+    --color-muted: #5f6578;
+    --color-border: #dfe2e8;
+
+    --radius-button: 8px;
+    --radius-input: 8px;
+    --radius-card: 10px;
+
+    --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+    --transition: 0.2s ease;
+}
+
+html.dark {
+    --color-accent: #ff4d55;
+    --color-accent-hover: #ff6b72;
+    --color-bg: #161616;
+    --color-text: #ececec;
+    --color-surface: #1e1e1e;
+    --color-muted: #909090;
+    --color-border: #2e2e2e;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+

@@ -1,0 +1,91 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$heroSlides = [
+    $block->getViewFileUrl('images/landing/mock-product-1.svg'),
+    $block->getViewFileUrl('images/landing/mock-product-2.svg'),
+    $block->getViewFileUrl('images/landing/mock-product-3.svg'),
+    $block->getViewFileUrl('images/landing/mock-product-4.svg'),
+    $block->getViewFileUrl('images/landing/mock-product-5.svg'),
+];
+?>
+<div class="w-full">
+    <div class="relative overflow-hidden bg-[var(--color-surface)] py-5 md:py-8">
+        <div class="relative mx-auto grid w-[92%] grid-cols-1 gap-7 sm:w-[90%] md:w-[88%] lg:w-[85%] lg:grid-cols-[1fr,1fr] lg:items-center">
+            <div>
+                <p class="mb-3 inline-flex rounded-full border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-[var(--color-accent)]"><?= $escaper->escapeHtml(__('Scooter parts · Accessories · Rider gear')) ?></p>
+                <h1 class="text-3xl font-extrabold tracking-tight md:text-5xl"><?= $escaper->escapeHtml(__('Everything for your scooter. One shop, delivered fast.')) ?></h1>
+                <p class="mt-4 max-w-2xl text-[1.03rem] leading-relaxed text-[var(--color-muted)]">
+                <?= $escaper->escapeHtml(__('Parts, upgrades, and accessories for every brand and model. Clear product info, easy ordering, and practical support.')) ?>
+                </p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                    <a class="inline-flex items-center gap-2 rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[var(--color-accent-hover)] hover:bg-[var(--color-accent-hover)] md:text-base" href="<?= $escaper->escapeUrl($block->getUrl('catalogsearch/result', ['_query' => ['q' => '*']])) ?>">
+                    <?= $escaper->escapeHtml(__('Browse catalog')) ?>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                    <a class="inline-flex items-center rounded-[var(--radius-button)] border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-2.5 text-sm font-semibold transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] md:text-base" href="<?= $escaper->escapeUrl($block->getUrl('sale')) ?>">
+                    <?= $escaper->escapeHtml(__('Deals')) ?>
+                    </a>
+                </div>
+            </div>
+
+            <div
+                class="space-y-3"
+                x-data="{ active: 0, total: <?= count($heroSlides) ?>, timer: null, start() { this.stop(); this.timer = setInterval(() => { this.active = (this.active + 1) % this.total; }, 5600); }, stop() { if (this.timer) { clearInterval(this.timer); this.timer = null; } }, go(i) { this.active = i; } }"
+                x-init="start()"
+                @mouseenter="stop()"
+                @mouseleave="start()"
+            >
+                <div class="relative ml-auto w-full max-w-[40rem] overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg)] shadow-sm">
+                    <div class="relative aspect-[5/4] w-full md:aspect-[11/10]">
+                        <?php foreach ($heroSlides as $index => $slide): ?>
+                            <img
+                                x-show="active === <?= (int) $index ?>"
+                                x-transition:enter="transition ease-out duration-700"
+                                x-transition:enter-start="opacity-0"
+                                x-transition:enter-end="opacity-100"
+                                x-transition:leave="transition ease-in duration-500"
+                                x-transition:leave-start="opacity-100"
+                                x-transition:leave-end="opacity-0"
+                                class="absolute inset-0 h-full w-full object-cover"
+                                src="<?= $escaper->escapeUrl($slide) ?>"
+                                alt="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics hero slide %1', $index + 1)) ?>"
+                                loading="<?= $index === 0 ? 'eager' : 'lazy' ?>"
+                            />
+                        <?php endforeach; ?>
+                    </div>
+
+                    <div class="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/45 to-transparent"></div>
+
+                    <div class="absolute inset-x-0 bottom-0 flex items-center justify-between px-3 py-2.5">
+                        <div class="flex items-center gap-1.5">
+                            <?php foreach ($heroSlides as $index => $_slide): ?>
+                                <button
+                                    type="button"
+                                    class="h-2.5 rounded-full bg-white/55 transition-all duration-200"
+                                    :class="active === <?= (int) $index ?> ? 'w-6 bg-white' : 'w-2.5'"
+                                    @click="go(<?= (int) $index ?>)"
+                                    aria-label="<?= $escaper->escapeHtmlAttr(__('Go to slide %1', $index + 1)) ?>"
+                                ></button>
+                            <?php endforeach; ?>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55" @click="active = (active - 1 + total) % total" aria-label="<?= $escaper->escapeHtmlAttr(__('Previous slide')) ?>">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+                            </button>
+                            <button type="button" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/60 bg-black/35 text-white transition-colors hover:bg-black/55" @click="active = (active + 1) % total" aria-label="<?= $escaper->escapeHtmlAttr(__('Next slide')) ?>">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-2 text-sm font-medium sm:grid-cols-3">
+                    <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-center"><?= $escaper->escapeHtml(__('Free shipping above €59')) ?></div>
+                    <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-center"><?= $escaper->escapeHtml(__('Ships in 1–2 business days')) ?></div>
+                    <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-center"><?= $escaper->escapeHtml(__('30-day easy returns')) ?></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

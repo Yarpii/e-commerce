@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="thunderbolt.locale.selector" template="Magento_Cms::page/language-country-currency.phtml">
+                <block class="Magento\Store\Block\Switcher" name="thunderbolt.locale.store_switcher" as="store_switcher" template="Magento_Store::switch/language-country.phtml"/>
+                <block class="Magento\Directory\Block\Currency" name="thunderbolt.locale.currency_switcher" as="currency_switcher" template="Magento_Directory::currency/language-country.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

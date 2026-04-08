@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="empty"/>
+    <referenceContainer name="page.wrapper">
+        <container name="header.container" as="header_container" label="Page Header" htmlTag="header" htmlClass="page-header" before="main.content"/>
+        <container name="main.content" htmlTag="main" htmlClass="page-main mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]" before="footer-container">
+            <container name="columns.top" label="Before Main Columns"/>
+            <container name="columns" htmlTag="div" htmlClass="columns grid gap-6">
+                <container name="main" label="Main Content Area" htmlTag="div" htmlClass="column main min-w-0"/>
+            </container>
+        </container>
+        <container name="footer-container" as="footer_container" label="Page Footer" htmlTag="footer" htmlClass="page-footer"/>
+    </referenceContainer>
+</layout>

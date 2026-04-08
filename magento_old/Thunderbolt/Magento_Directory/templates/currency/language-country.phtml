@@ -1,0 +1,31 @@
+<?php
+/** @var \Magento\Directory\Block\Currency $block */
+$currencies = $block->getCurrencies();
+if (!is_array($currencies)) {
+    $currencies = [];
+}
+$currentCode = (string)$block->getCurrentCurrencyCode();
+?>
+<?php if (count($currencies) <= 1): ?>
+    <div class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-300">
+        <?= $escaper->escapeHtml(__('Er is momenteel maar één valuta actief.')) ?>
+    </div>
+<?php endif; ?>
+<ul class="space-y-2" aria-label="<?= $escaper->escapeHtmlAttr(__('Beschikbare valuta')) ?>">
+    <?php foreach ($currencies as $code => $name): ?>
+        <?php $isCurrent = $code === $currentCode; ?>
+        <li>
+            <?php if ($isCurrent): ?>
+                <span class="inline-flex w-full items-center gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700 dark:border-red-900 dark:bg-red-950/30 dark:text-red-300" aria-current="true">
+                    <span aria-hidden="true">💱</span>
+                    <span><?= $escaper->escapeHtml($name) ?> (<?= $escaper->escapeHtml($code) ?>)</span>
+                </span>
+            <?php else: ?>
+                <a class="inline-flex w-full items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-red-700 dark:hover:text-red-300" href="<?= $escaper->escapeUrl($block->getSwitchCurrencyUrl($code)) ?>">
+                    <span aria-hidden="true">💱</span>
+                    <span><?= $escaper->escapeHtml($name) ?> (<?= $escaper->escapeHtml($code) ?>)</span>
+                </a>
+            <?php endif; ?>
+        </li>
+    <?php endforeach; ?>
+</ul>

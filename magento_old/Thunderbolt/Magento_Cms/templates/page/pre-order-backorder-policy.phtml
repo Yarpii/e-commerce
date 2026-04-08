@@ -1,0 +1,22 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+?>
+<section class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] md:py-10 lg:w-[85%]">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-sm md:p-8">
+        <h1 class="text-2xl font-black tracking-tight text-[var(--color-text)] md:text-4xl"><?= $escaper->escapeHtml(__('Pre-Order & Backorder Policy')) ?></h1>
+        <p class="mt-3 max-w-4xl text-sm text-[var(--color-muted)] md:text-base"><?= $escaper->escapeHtml(__('How pre-orders and backorders are prioritized, updated and dispatched.')) ?></p>
+
+        <ol class="mt-5 grid gap-3 text-sm text-[var(--color-muted)]">
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><span class="font-semibold text-[var(--color-text)]">1. <?= $escaper->escapeHtml(__('Queue position')) ?></span><br><?= $escaper->escapeHtml(__('Orders are typically prioritized by payment confirmation and availability window.')) ?></li>
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><span class="font-semibold text-[var(--color-text)]">2. <?= $escaper->escapeHtml(__('Lead-time updates')) ?></span><br><?= $escaper->escapeHtml(__('Estimated dates can shift due to supplier and transport constraints.')) ?></li>
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><span class="font-semibold text-[var(--color-text)]">3. <?= $escaper->escapeHtml(__('Split shipment behavior')) ?></span><br><?= $escaper->escapeHtml(__('Mixed baskets may split between in-stock and incoming items depending on shipping setup.')) ?></li>
+            <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] p-4"><span class="font-semibold text-[var(--color-text)]">4. <?= $escaper->escapeHtml(__('Cancellation and changes')) ?></span><br><?= $escaper->escapeHtml(__('Change options depend on fulfillment status and supplier reservation state.')) ?></li>
+        </ol>
+
+        <div class="mt-6 flex flex-wrap gap-2 text-sm">
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('product-availability-restock-faq')) ?>"><?= $escaper->escapeHtml(__('Product Availability & Restock FAQ')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('order-issues-help')) ?>"><?= $escaper->escapeHtml(__('Order Issues Help')) ?></a>
+            <a class="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 transition-colors hover:border-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('contact')) ?>"><?= $escaper->escapeHtml(__('Contact order support')) ?></a>
+        </div>
+    </div>
+</section>

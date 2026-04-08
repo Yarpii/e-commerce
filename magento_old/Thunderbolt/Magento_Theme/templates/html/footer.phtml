@@ -1,0 +1,283 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+if (!function_exists('__')) {
+    function __($text, ...$args)
+    {
+        $message = (string) $text;
+        return $args ? vsprintf($message, array_map('strval', $args)) : $message;
+    }
+}
+
+$objectManagerClass = 'Magento\\Framework\\App\\ObjectManager';
+$objectManager = $objectManagerClass::getInstance();
+$scopeConfig = $objectManager->get('Magento\\Framework\\App\\Config\\ScopeConfigInterface');
+$storeManager = $objectManager->get('Magento\\Store\\Model\\StoreManagerInterface');
+$categoryCollectionFactory = $objectManager->get('Magento\\Catalog\\Model\\ResourceModel\\Category\\CollectionFactory');
+$storeId = (int) $storeManager->getStore()->getId();
+
+$getConfigUrl = static function (array $paths) use ($scopeConfig, $storeId): ?string {
+    foreach ($paths as $path) {
+        $value = (string) $scopeConfig->getValue($path, 'stores', $storeId);
+        if ($value !== '') {
+            return $value;
+        }
+    }
+
+    return null;
+};
+
+$instagramUrl = $getConfigUrl(['thunderbolt/social/instagram_url', 'scooterdynamics/social/instagram_url']);
+$youtubeUrl = $getConfigUrl(['thunderbolt/social/youtube_url', 'scooterdynamics/social/youtube_url']);
+$tiktokUrl = $getConfigUrl(['thunderbolt/social/tiktok_url', 'scooterdynamics/social/tiktok_url']);
+
+$shopLinks = [
+    ['label' => __('Performance Parts'), 'url' => $block->getUrl('catalogsearch/result', ['_query' => ['q' => 'scooter parts']])],
+    ['label' => __('Sale & Clearance'), 'url' => $block->getUrl('sale')],
+    ['label' => __('Accessories'), 'url' => $block->getUrl('catalogsearch/result', ['_query' => ['q' => 'accessories']])],
+    ['label' => __('Rider Clothing'), 'url' => $block->getUrl('catalogsearch/result', ['_query' => ['q' => 'clothing']])],
+    ['label' => __('Brands'), 'url' => $block->getUrl('catalogsearch/result', ['_query' => ['q' => 'brands']])],
+];
+
+$businessLinks = [
+    ['label' => __('Wholesale'), 'url' => $block->getUrl('wholesale-partnerships')],
+    ['label' => __('Dealer Onboarding'), 'url' => $block->getUrl('pro-dealer-onboarding-requirements')],
+    ['label' => __('B2B Contact & Intake'), 'url' => $block->getUrl('b2b-contact-intake')],
+    ['label' => __('Adverteren met ons'), 'url' => $block->getUrl('adverteren')],
+    ['label' => __('International Setup'), 'url' => $block->getUrl('international-setup-store-views')],
+    ['label' => __('Priority Support'), 'url' => $block->getUrl('sla-priority-support')],
+    ['label' => __('Bulk Ordering Guide'), 'url' => $block->getUrl('fleet-workshop-bulk-ordering-guide')],
+];
+
+$accountLinks = [
+    ['label' => __('My Account'), 'url' => $block->getUrl('customer/account/login')],
+    ['label' => __('Track Your Order'), 'url' => $block->getUrl('sales/guest/form')],
+    ['label' => __('Create Account'), 'url' => $block->getUrl('customer/account/create')],
+    ['label' => __('Track Shipment'), 'url' => $block->getUrl('sales/guest/form')],
+    ['label' => __('Payment Methods'), 'url' => $block->getUrl('payment-methods')],
+    ['label' => __('Returns & Warranty'), 'url' => $block->getUrl('returns-warranty')],
+    ['label' => __('Order Issues Help'), 'url' => $block->getUrl('order-issues-help')],
+    ['label' => __('VAT & Invoices'), 'url' => $block->getUrl('vat-invoices')],
+];
+
+$supportLinks = [
+    ['label' => __('Fitment Help'), 'url' => $block->getUrl('fitment-help')],
+    ['label' => __('Contact Us'), 'url' => $block->getUrl('contact')],
+    ['label' => __('Installation Guides'), 'url' => $block->getUrl('installation-guides')],
+    ['label' => __('FAQ Hub'), 'url' => $block->getUrl('faq-hub')],
+    ['label' => __('Dealer Locator'), 'url' => $block->getUrl('dealer-locator-service-partners')],
+    ['label' => __('Availability & Restock'), 'url' => $block->getUrl('product-availability-restock-faq')],
+];
+
+$internationalLinks = [
+    ['label' => __('Shipping by Country'), 'url' => $block->getUrl('shipping-by-country')],
+    ['label' => __('Incoterms: DAP & DDP'), 'url' => $block->getUrl('incoterms-dap-ddp')],
+    ['label' => __('Customs & Duties FAQ'), 'url' => $block->getUrl('customs-duties-faq')],
+    ['label' => __('International Returns Step-by-Step'), 'url' => $block->getUrl('international-returns-step-by-step')],
+    ['label' => __('Customs Checklist'), 'url' => $block->getUrl('customs-documentation-checklist')],
+    ['label' => __('Shipping Restrictions'), 'url' => $block->getUrl('shipping-restrictions-by-product-type')],
+    ['label' => __('International Exchange Policy'), 'url' => $block->getUrl('exchange-policy-international')],
+];
+
+$policyLinks = [
+    ['label' => __('Terms & Conditions'), 'url' => $block->getUrl('terms-and-conditions')],
+    ['label' => __('Privacy Policy'), 'url' => $block->getUrl('privacy-policy-cookie-restriction-mode')],
+    ['label' => __('Pre-Order Policy'), 'url' => $block->getUrl('pre-order-backorder-policy')],
+    ['label' => __('Cookie Policy'), 'url' => $block->getUrl('cookie-policy')],
+    ['label' => __('Returns Decision Tree'), 'url' => $block->getUrl('returns-decision-tree')],
+    ['label' => __('Warranty Claim Checklist'), 'url' => $block->getUrl('warranty-claim-checklist')],
+    ['label' => __('Warranty Exclusions'), 'url' => $block->getUrl('warranty-exclusions-non-covered-cases')],
+];
+
+$topFooterCategories = [];
+try {
+    $rootCategoryId = (int) $storeManager->getStore()->getRootCategoryId();
+    $categoryCollection = $categoryCollectionFactory->create();
+    $categoryCollection
+        ->addAttributeToSelect(['name', 'url_key'])
+        ->addAttributeToFilter('is_active', 1)
+        ->addAttributeToFilter('include_in_menu', 1)
+        ->addFieldToFilter('parent_id', $rootCategoryId)
+        ->addAttributeToSort('position', 'ASC')
+        ->setPageSize(8);
+
+    foreach ($categoryCollection as $category) {
+        $topFooterCategories[] = [
+            'name' => (string) $category->getName(),
+            'url' => (string) $category->getUrl(),
+        ];
+    }
+} catch (\Throwable $e) {
+    $topFooterCategories = [];
+}
+$currentYear = (new \DateTimeImmutable('now'))->format('Y');
+?>
+<footer class="mt-14 border-t border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text)]" style="--color-surface:#18181b; --color-bg:#0f0f12; --color-text:#f4f4f5; --color-muted:#a1a1aa; --color-border:rgba(255,255,255,0.16); --color-accent:#dc2626; --color-accent-hover:#b91c1c;">
+
+    <!-- {{-- USP bar --}}amp; -->
+    <div class="border-b border-[var(--color-border)]">
+        <div class="mx-auto grid w-[92%] grid-cols-1 gap-x-6 gap-y-4 py-5 sm:w-[90%] sm:grid-cols-2 md:w-[88%] lg:w-[85%] lg:grid-cols-4">
+            <div class="px-1">
+                <p class="text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Shipping')) ?></p>
+                <p class="mt-1 text-[0.9375rem] font-semibold"><?= $escaper->escapeHtml(__('Delivered to 35+ countries')) ?></p>
+                <p class="mt-0.5 text-[0.875rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Tracked dispatch and delivery options at checkout.')) ?></p>
+            </div>
+            <div class="px-1">
+                <p class="text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Localization')) ?></p>
+                <p class="mt-1 text-[0.9375rem] font-semibold"><?= $escaper->escapeHtml(__('Language and currency ready')) ?></p>
+                <p class="mt-0.5 text-[0.875rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Shop in your preferred language, store view and currency.')) ?></p>
+            </div>
+            <div class="px-1">
+                <p class="text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Duty & VAT')) ?></p>
+                <p class="mt-1 text-[0.9375rem] font-semibold"><?= $escaper->escapeHtml(__('Transparent checkout')) ?></p>
+                <p class="mt-0.5 text-[0.875rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Clear totals, tax handling and invoice support per region.')) ?></p>
+            </div>
+            <div class="px-1">
+                <p class="text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Support')) ?></p>
+                <p class="mt-1 text-[0.9375rem] font-semibold"><?= $escaper->escapeHtml(__('Rider-first technical help')) ?></p>
+                <p class="mt-0.5 text-[0.875rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Advice on fitment, compatibility and setup before ordering.')) ?></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- {{-- Logo + subscribe --}}amp; -->
+    <div>
+        <div class="mx-auto grid w-[92%] grid-cols-1 gap-6 py-8 sm:w-[90%] md:w-[88%] lg:w-[85%] lg:grid-cols-2 lg:items-center">
+            <div>
+                <a class="inline-block no-underline leading-none" href="<?= $escaper->escapeUrl($block->getUrl('')) ?>" aria-label="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics — Homepage')) ?>">
+                    <img
+                        class="block h-11 w-auto max-w-[180px] sm:h-12 sm:max-w-[210px]"
+                        src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/logo-dark.svg')) ?>"
+                        alt="<?= $escaper->escapeHtmlAttr(__('ScooterDynamics')) ?>"
+                        width="220" height="44"
+                    />
+                </a>
+                <p class="mt-2 text-[0.9375rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Built for riders worldwide.')) ?></p>
+                <div class="mt-3 flex flex-wrap gap-4 text-[0.9375rem]" aria-label="<?= $escaper->escapeHtmlAttr(__('Social Links')) ?>">
+                    <?php if ($instagramUrl): ?>
+                        <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($instagramUrl) ?>" target="_blank" rel="noopener noreferrer"><?= $escaper->escapeHtml(__('Instagram')) ?></a>
+                    <?php endif; ?>
+                    <?php if ($youtubeUrl): ?>
+                        <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($youtubeUrl) ?>" target="_blank" rel="noopener noreferrer"><?= $escaper->escapeHtml(__('YouTube')) ?></a>
+                    <?php endif; ?>
+                    <?php if ($tiktokUrl): ?>
+                        <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($tiktokUrl) ?>" target="_blank" rel="noopener noreferrer"><?= $escaper->escapeHtml(__('TikTok')) ?></a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div>
+                <h2 class="mb-2 text-[1rem] font-bold"><?= $escaper->escapeHtml(__('Subscribe')) ?></h2>
+                <p class="mb-3 text-[0.9375rem] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Receive tuning insights, launch alerts and regional promotions.')) ?></p>
+                <form class="flex flex-wrap gap-2" action="<?= $escaper->escapeUrl($block->getUrl('newsletter/subscriber/new')) ?>" method="post">
+                    <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>" />
+                    <label for="tb-newsletter" class="sr-only"><?= $escaper->escapeHtml(__('Email Address')) ?></label>
+                    <input id="tb-newsletter" class="min-w-[14rem] grow rounded-[var(--radius-input)] border border-[var(--color-border)] bg-[var(--color-bg)] px-3.5 py-2.5 text-[0.9375rem] transition focus:border-[var(--color-accent)] focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/10" type="email" name="email" placeholder="<?= $escaper->escapeHtmlAttr(__('Enter your email')) ?>" required />
+                    <button class="rounded-[var(--radius-button)] border border-[var(--color-accent)] bg-[var(--color-accent)] px-4 py-2.5 text-[0.9375rem] font-semibold text-white transition-colors hover:border-[var(--color-accent-hover)] hover:bg-[var(--color-accent-hover)]" type="submit"><?= $escaper->escapeHtml(__('Subscribe')) ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- {{-- Link columns --}}amp; -->
+    <div class="border-b border-[var(--color-border)]">
+        <div class="mx-auto w-[92%] py-8 sm:w-[90%] md:w-[88%] lg:w-[85%]">
+            <div class="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Shop')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($shopLinks as $shopLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($shopLink['url']) ?>"><?= $escaper->escapeHtml($shopLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Voor Bedrijven')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($businessLinks as $businessLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($businessLink['url']) ?>"><?= $escaper->escapeHtml($businessLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Account & Orders')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($accountLinks as $accountLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($accountLink['url']) ?>"><?= $escaper->escapeHtml($accountLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Support')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($supportLinks as $supportLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($supportLink['url']) ?>"><?= $escaper->escapeHtml($supportLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Internationaal')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($internationalLinks as $internationalLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($internationalLink['url']) ?>"><?= $escaper->escapeHtml($internationalLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Beleid')) ?></h3>
+                    <ul class="grid gap-2.5 text-[0.9375rem]">
+                        <?php foreach ($policyLinks as $policyLink): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($policyLink['url']) ?>"><?= $escaper->escapeHtml($policyLink['label']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </section>
+            </div>
+
+            <?php if ($topFooterCategories): ?>
+                <div class="mt-7 border-t border-[var(--color-border)] pt-6">
+                    <h3 class="mb-3 text-[0.75rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-muted)]"><?= $escaper->escapeHtml(__('Top Categories')) ?></h3>
+                    <ul class="grid grid-cols-1 gap-x-8 gap-y-2.5 text-[0.9375rem] sm:grid-cols-2 lg:grid-cols-4">
+                        <?php foreach ($topFooterCategories as $footerCategory): ?>
+                            <li><a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($footerCategory['url']) ?>"><?= $escaper->escapeHtml($footerCategory['name']) ?></a></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- {{-- Region / legal bar --}}amp; -->
+    <div class="border-b border-[var(--color-border)]">
+        <div class="mx-auto flex w-[92%] flex-col gap-4 py-4 text-[0.875rem] sm:w-[90%] md:w-[88%] lg:w-[85%] lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-wrap items-center gap-3 text-[var(--color-muted)]">
+                <span class="font-semibold text-[var(--color-text)]"><?= $escaper->escapeHtml(__('Shop Region')) ?></span>
+                <div><?= /* @noEscape */ $block->getChildHtml('footer.store_switcher') ?></div>
+                <span class="font-semibold text-[var(--color-text)]"><?= $escaper->escapeHtml(__('Currency')) ?></span>
+                <div><?= /* @noEscape */ $block->getChildHtml('footer.currency_switcher') ?></div>
+            </div>
+            <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('privacy-policy-cookie-restriction-mode')) ?>"><?= $escaper->escapeHtml(__('Privacy')) ?></a>
+                <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('terms-and-conditions')) ?>"><?= $escaper->escapeHtml(__('Terms')) ?></a>
+                <a class="transition-colors hover:text-[var(--color-accent)]" href="<?= $escaper->escapeUrl($block->getUrl('cookie-policy')) ?>"><?= $escaper->escapeHtml(__('Cookies')) ?></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- {{-- Copyright bar --}}amp; -->
+    <div class="py-4 text-[0.875rem] text-[var(--color-muted)]">
+        <div class="mx-auto flex w-[92%] flex-wrap items-center justify-between gap-4 sm:w-[90%] md:w-[88%] lg:w-[85%]">
+            <span><?= $escaper->escapeHtml(__('© %1 ScooterDynamics. Built for riders worldwide.', $currentYear)) ?></span>
+            <span class="inline-flex items-center gap-2">
+                <svg width="34" height="20" viewBox="0 0 34 20" aria-label="Visa"><rect width="34" height="20" rx="3" fill="var(--color-surface)" stroke="var(--color-border)"/><text x="17" y="13" font-size="8" font-weight="600" text-anchor="middle" fill="var(--color-muted)">VISA</text></svg>
+                <svg width="34" height="20" viewBox="0 0 34 20" aria-label="Mastercard"><rect width="34" height="20" rx="3" fill="var(--color-surface)" stroke="var(--color-border)"/><circle cx="14" cy="10" r="5" fill="none" stroke="var(--color-muted)" stroke-width="1.2"/><circle cx="20" cy="10" r="5" fill="none" stroke="var(--color-muted)" stroke-width="1.2"/></svg>
+                <svg width="34" height="20" viewBox="0 0 34 20" aria-label="PayPal"><rect width="34" height="20" rx="3" fill="var(--color-surface)" stroke="var(--color-border)"/><text x="17" y="13" font-size="6" font-weight="600" text-anchor="middle" fill="var(--color-muted)">PayPal</text></svg>
+                <svg width="34" height="20" viewBox="0 0 34 20" aria-label="Klarna"><rect width="34" height="20" rx="3" fill="var(--color-surface)" stroke="var(--color-border)"/><text x="17" y="13" font-size="6" font-weight="600" text-anchor="middle" fill="var(--color-muted)">Klarna</text></svg>
+                <svg width="34" height="20" viewBox="0 0 34 20" aria-label="Apple Pay"><rect width="34" height="20" rx="3" fill="var(--color-surface)" stroke="var(--color-border)"/><text x="17" y="13" font-size="6" font-weight="600" text-anchor="middle" fill="var(--color-muted)">Apple</text></svg>
+            </span>
+        </div>
+    </div>
+</footer>
