@@ -2,5 +2,5 @@
 declare(strict_types=1);
 use Brew\Core\Bootstrap;
 
-require __DIR__ . '/../brew/core/Bootstrap.php';
+require __DIR__ . '/../Brew/Core/Bootstrap.php';
 Bootstrap::run();

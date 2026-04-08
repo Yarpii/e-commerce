@@ -46,6 +46,18 @@ final class HomeController extends Controller
             'message' => 'Structbrew is a living PHP framework focused on automation, structure, and simplicity.',
         ]);
     }
+    /**
+     * Contact page
+     * @throws Throwable
+     */
+    public function contact(): Response
+    {
+        return $this->view('home.contact', [
+            'title'   => 'Contact',
+            'message' => 'Get in touch with us.',
+        ]);
+    }
+
     public function api(Request $req): Response
     {
         return $this->json([
