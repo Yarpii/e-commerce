@@ -18,7 +18,9 @@ final class HomeController extends Controller
     {
         return $this->view('home.index', [
             'title'       => 'Home',
-            'featured'    => Products::featured(8),
+            'featured'    => Products::featured(4),
+            'trending'    => Products::trending(4),
+            'newArrivals' => Products::newArrivals(4),
             'onSale'      => Products::onSale(),
             'categories'  => Products::categories(),
         ]);
