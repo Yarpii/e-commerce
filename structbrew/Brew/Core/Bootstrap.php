@@ -9,8 +9,8 @@ final class Bootstrap
     public static function run(): void
     {
         $rootPath   = dirname(__DIR__, 2);
-        $brewPath   = $rootPath . '/brew';
-        $routesPath = $brewPath . '/routes';
+        $brewPath   = $rootPath . '/Brew';
+        $routesPath = $brewPath . '/Routes';
         spl_autoload_register(function (string $class) use ($brewPath): void {
             $prefix  = 'Brew\\';
             $baseDir = $brewPath . '/';

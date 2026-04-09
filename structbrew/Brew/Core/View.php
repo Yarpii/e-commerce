@@ -53,7 +53,7 @@ final class View
     private static function resolvePath(string $view): string
     {
         if (self::$viewsPath === '') {
-            self::$viewsPath = dirname(__DIR__) . '/views/';
+            self::$viewsPath = dirname(__DIR__) . '/Views/';
         }
         $relative = str_replace('.', '/', $view) . '.php';
         return self::$viewsPath . $relative;

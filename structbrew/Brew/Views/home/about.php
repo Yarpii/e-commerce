@@ -1,118 +1,99 @@
-<section class="relative overflow-hidden bg-white dark:bg-brew-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
-    <div class="absolute inset-0 -z-10">
-        <div class="absolute top-[-10rem] left-[-8rem] w-[400px] h-[400px] bg-brew-accent/15 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-[-8rem] right-[-6rem] w-[350px] h-[350px] bg-brew-primary/10 blur-[100px] rounded-full"></div>
+<!-- Hero -->
+<section class="relative overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-[var(--color-accent)] rounded-full blur-[100px]"></div>
     </div>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20 text-center">
-        <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-brew-accent via-brew-primary to-brew-deep bg-clip-text text-transparent">
-            About Structbrew
-        </h1>
-        <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Structbrew is a <strong class="text-brew-accent dark:text-brew-primary">living system</strong> for PHP — a framework that treats structure,
-            logic, and memory as one evolving organism. It’s minimal, modular, and built to think in layers.
+    <div class="relative mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-16 md:py-20 text-center">
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">About <span class="text-[var(--color-accent)]">Structbrew</span> Store</h1>
+        <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
+            We believe great tech should be accessible to everyone. Our mission is to curate the best electronics, audio gear, and accessories at fair prices.
         </p>
     </div>
 </section>
-<section class="relative overflow-hidden bg-base-100 dark:bg-brew-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
-    <div class="absolute inset-0 -z-10">
-        <div class="absolute top-[15%] left-[10%] w-[400px] h-[400px] bg-brew-accent/10 blur-[100px] rounded-full"></div>
-        <div class="absolute bottom-[10%] right-[15%] w-[300px] h-[300px] bg-brew-primary/10 blur-[80px] rounded-full"></div>
-    </div>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-16">
-        <h2 class="text-center text-2xl md:text-3xl font-bold mb-10 bg-gradient-to-r from-brew-accent to-brew-primary bg-clip-text text-transparent">
-            Core Principles
-        </h2>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="group bg-white/90 dark:bg-brew-dark/70 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:border-brew-accent/40 hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-md bg-gradient-to-br from-brew-accent/20 to-brew-primary/20 flex items-center justify-center">⚙️</div>
-                    <h3 class="font-semibold text-brew-accent dark:text-brew-primary">Living System</h3>
+
+<!-- Values -->
+<section class="bg-[var(--color-bg)]">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-14">
+        <h2 class="text-2xl font-bold text-center text-[var(--color-text)] mb-8">What We Stand For</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6" style="box-shadow: var(--shadow-sm)">
+                <div class="w-12 h-12 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center text-[var(--color-accent)] mb-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Structbrew evolves with your code. Its layers — <em>Cortex, Muscle, Flow</em> — define cognition,
-                    logic, and interaction. Each layer is aware of the others.
-                </p>
+                <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">Quality First</h3>
+                <p class="text-sm text-[var(--color-muted)] leading-relaxed">Every product in our catalog is tested and reviewed before listing. We only sell what we'd use ourselves.</p>
             </div>
-            <div class="group bg-white/90 dark:bg-brew-dark/70 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:border-brew-accent/40 hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-md bg-gradient-to-br from-brew-accent/20 to-brew-primary/20 flex items-center justify-center">🧠</div>
-                    <h3 class="font-semibold text-brew-accent dark:text-brew-primary">Cognitive Design</h3>
+            <div class="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6" style="box-shadow: var(--shadow-sm)">
+                <div class="w-12 h-12 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center text-[var(--color-accent)] mb-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Structbrew observes itself — manifests, paths, and processes form its self-map,
-                    enabling intelligent introspection and consistency checks.
-                </p>
+                <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">Global Reach</h3>
+                <p class="text-sm text-[var(--color-muted)] leading-relaxed">We ship worldwide with transparent pricing. No hidden fees, no surprise duties. What you see is what you pay.</p>
             </div>
-            <div class="group bg-white/90 dark:bg-brew-dark/70 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:border-brew-accent/40 hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-md bg-gradient-to-br from-brew-accent/20 to-brew-primary/20 flex items-center justify-center">🪶</div>
-                    <h3 class="font-semibold text-brew-accent dark:text-brew-primary">Elegant Simplicity</h3>
+            <div class="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6" style="box-shadow: var(--shadow-sm)">
+                <div class="w-12 h-12 rounded-xl bg-[var(--color-accent)]/10 flex items-center justify-center text-[var(--color-accent)] mb-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    No Composer clutter, no external dependencies — just PHP and purpose. Structbrew stays readable,
-                    portable, and powerful by design.
-                </p>
-            </div>
-            <div class="group bg-white/90 dark:bg-brew-dark/70 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:border-brew-accent/40 hover:shadow-lg transition-all duration-300">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-8 h-8 rounded-md bg-gradient-to-br from-brew-accent/20 to-brew-primary/20 flex items-center justify-center">⚡</div>
-                    <h3 class="font-semibold text-brew-accent dark:text-brew-primary">The Volt Engine</h3>
-                </div>
-                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                    Volt powers Structbrew’s neural CLI — orchestrating builds, phases, and seeds into
-                    one continuous, living process.
-                </p>
+                <h3 class="text-lg font-semibold text-[var(--color-text)] mb-2">Customer Focus</h3>
+                <p class="text-sm text-[var(--color-muted)] leading-relaxed">Our support team is here 7 days a week. We don't just sell products, we build lasting relationships.</p>
             </div>
         </div>
     </div>
 </section>
-<section class="relative overflow-hidden bg-white dark:bg-brew-dark/95 text-gray-800 dark:text-gray-200">
-    <div class="max-w-4xl mx-auto px-6 py-20 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-brew-accent to-brew-primary bg-clip-text text-transparent">
-            The Philosophy Behind Structbrew
-        </h2>
-        <p class="text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-            Structbrew redefines how frameworks think. Instead of rigid design patterns, it treats architecture as a dialogue
-            between structure and behavior.
-            Code isn’t just written — it evolves, reflects, and remembers.
-        </p>
-        <p class="mt-4 text-base text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-            Every project becomes an ecosystem.
-            Each build phase refines how the system understands itself, forming the foundation for organic software growth.
-        </p>
-    </div>
-</section>
-<section class="relative overflow-hidden bg-gradient-to-br from-white via-brew-base/20 to-brew-light dark:from-brew-dark dark:to-brew-dark/90 text-gray-800 dark:text-gray-200">
-    <div class="max-w-5xl mx-auto px-6 py-20 text-center">
-        <h2 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-brew-accent via-brew-primary to-brew-deep bg-clip-text text-transparent">
-            The Vision Ahead
-        </h2>
-        <p class="mt-4 text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto">
-            Structbrew is the foundation of a broader ecosystem — uniting framework, builder, and intelligence
-            into one continuum. The goal isn’t automation, but awareness: a system that evolves with purpose.
-        </p>
-        <div class="mt-8 flex justify-center gap-4 flex-wrap">
-            <span class="px-4 py-2 rounded-full bg-brew-accent/10 text-brew-accent text-sm font-medium">Adaptive Framework</span>
-            <span class="px-4 py-2 rounded-full bg-brew-primary/10 text-brew-primary text-sm font-medium">Neural CLI</span>
-            <span class="px-4 py-2 rounded-full bg-brew-accent/10 text-brew-accent text-sm font-medium">Schema Intelligence</span>
+
+<!-- Stats -->
+<section class="bg-[var(--color-surface)]">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-14">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-[var(--color-accent)]">50K+</p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">Happy Customers</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-[var(--color-accent)]">500+</p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">Products</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-[var(--color-accent)]">30+</p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">Countries Served</p>
+            </div>
+            <div>
+                <p class="text-3xl md:text-4xl font-extrabold text-[var(--color-accent)]">4.8</p>
+                <p class="mt-1 text-sm text-[var(--color-muted)]">Average Rating</p>
+            </div>
         </div>
     </div>
 </section>
-<section class="relative overflow-hidden bg-white dark:bg-brew-dark text-gray-800 dark:text-gray-200">
-    <div class="max-w-4xl mx-auto px-6 py-16 text-center">
-        <h2 class="text-2xl font-bold mb-8 bg-gradient-to-r from-brew-accent to-brew-primary bg-clip-text text-transparent">
-            The Living Timeline
-        </h2>
-        <div class="flex flex-wrap justify-center items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
-            <span class="font-semibold text-brew-accent">Phase A</span><span>Bootstrap</span> →
-            <span class="font-semibold text-brew-accent">Phase B</span><span>Manifest</span> →
-            <span class="font-semibold text-brew-accent">Phase C</span><span>Neural Core</span> →
-            <span class="font-semibold text-brew-accent">Phase D</span><span>Volt Engine</span> →
-            <span class="font-semibold text-brew-accent">Phase E</span><span>Interface</span> →
-            <span class="font-semibold text-brew-accent">Phase F</span><span>Continuum</span>
-        </div>
-        <p class="mt-6 text-gray-500 dark:text-gray-400 text-xs italic">
-            Each phase builds upon the last — Structbrew is not released, it evolves.
+
+<!-- Powered By -->
+<section class="bg-[var(--color-bg)]">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-14 text-center">
+        <h2 class="text-2xl font-bold text-[var(--color-text)] mb-4">Powered by Structbrew Framework</h2>
+        <p class="text-sm text-[var(--color-muted)] max-w-2xl mx-auto leading-relaxed mb-6">
+            This store is built on the Structbrew PHP framework - a zero-dependency, modular framework designed for clarity, performance, and organic growth. No Composer bloat, no external packages. Just PHP and purpose.
         </p>
+        <div class="flex flex-wrap justify-center gap-3">
+            <span class="px-4 py-2 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium border border-[var(--color-accent)]/20">Zero Dependencies</span>
+            <span class="px-4 py-2 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium border border-[var(--color-accent)]/20">Alpine.js</span>
+            <span class="px-4 py-2 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium border border-[var(--color-accent)]/20">Tailwind CSS</span>
+            <span class="px-4 py-2 rounded-full bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-sm font-medium border border-[var(--color-accent)]/20">Nginx Ready</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-gradient-to-r from-[var(--color-accent)] to-orange-500 text-white">
+    <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-12 text-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">Ready to shop?</h2>
+        <p class="mt-2 text-white/85">Browse our curated collection of premium tech products.</p>
+        <div class="mt-6 flex justify-center gap-3">
+            <a href="/shop" class="inline-flex h-12 items-center gap-2 rounded-[var(--radius-button)] bg-white text-[var(--color-accent)] px-6 text-sm font-bold transition hover:bg-gray-100">
+                Browse Products
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="/contact" class="inline-flex h-12 items-center gap-2 rounded-[var(--radius-button)] border border-white/30 bg-white/10 px-6 text-sm font-semibold text-white transition hover:bg-white/20">
+                Contact Us
+            </a>
+        </div>
     </div>
 </section>
