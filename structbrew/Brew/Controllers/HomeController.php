@@ -16,12 +16,11 @@ final class HomeController extends Controller
      */
     public function index(Request $req): Response
     {
-        $all = Products::all();
         return $this->view('home.index', [
             'title'       => 'Home',
-            'featured'    => array_slice($all, 0, 4),
-            'trending'    => array_slice($all, 4, 4),
-            'newArrivals' => array_slice($all, 8, 4),
+            'featured'    => Products::featured(4),
+            'trending'    => Products::trending(4),
+            'newArrivals' => Products::newArrivals(4),
             'onSale'      => Products::onSale(),
             'categories'  => Products::categories(),
         ]);
