@@ -32,13 +32,9 @@
 >
     <div class="mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] flex items-center justify-between gap-3 h-16">
         <!-- Logo -->
-        <a href="/" class="flex items-center gap-2.5 shrink-0">
-            <div class="w-9 h-9 rounded-lg bg-[var(--color-accent)] flex items-center justify-center">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-            </div>
-            <span class="text-lg font-bold tracking-tight">
-                <span class="text-[var(--color-text)]">Struct</span><span class="text-[var(--color-accent)]">brew</span>
-            </span>
+        <a href="/" class="flex items-center gap-2.5 shrink-0" aria-label="Scooter Dynamics">
+            <img src="/assets/images/logo-dark.svg" alt="Scooter Dynamics" class="h-12 w-auto dark:hidden">
+            <img src="/assets/images/logo-light.svg" alt="Scooter Dynamics" class="h-12 w-auto hidden dark:block">
         </a>
 
         <!-- Search (desktop) -->
@@ -57,7 +53,7 @@
         <nav class="hidden lg:flex items-center gap-5 text-sm font-medium shrink-0">
             <a href="/" class="text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors">Home</a>
             <a href="/shop" class="text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors">Shop</a>
-            <a href="/about" class="text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors">About</a>
+            <a href="/about" class="text-[var(--color-text)] hover:text-[var(--color-accent]_transition-colors">About</a>
             <a href="/contact" class="text-[var(--color-text)] hover:text-[var(--color-accent)] transition-colors">Contact</a>
         </nav>
 

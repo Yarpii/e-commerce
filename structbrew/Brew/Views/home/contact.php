@@ -62,7 +62,7 @@
                 <h2 class="text-lg font-semibold text-[var(--color-text)]">Direct Contact</h2>
                 <ul class="mt-3 space-y-2 text-sm">
                     <li><a class="text-[var(--color-accent)] hover:underline" href="tel:+18005551234">+1 800 555 1234</a></li>
-                    <li><a class="text-[var(--color-accent)] hover:underline" href="mailto:support@structbrew.store">support@structbrew.store</a></li>
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="mailto:support@scooterdynamics.store">support@scooterdynamics.store</a></li>
                     <li class="text-[var(--color-muted)]">Mon - Fri: 09:00 - 17:00</li>
                 </ul>
             </div>

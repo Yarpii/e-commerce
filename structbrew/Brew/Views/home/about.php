@@ -4,7 +4,7 @@
         <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-[var(--color-accent)] rounded-full blur-[100px]"></div>
     </div>
     <div class="relative mx-auto w-[92%] sm:w-[90%] md:w-[88%] lg:w-[85%] py-16 md:py-20 text-center">
-        <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">About <span class="text-[var(--color-accent)]">Structbrew</span> Store</h1>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight">About <span class="text-[var(--color-accent)]">Scooter Dynamics</span></h1>
         <p class="mt-4 text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed">
             We believe great tech should be accessible to everyone. Our mission is to curate the best electronics, audio gear, and accessories at fair prices.
         </p>

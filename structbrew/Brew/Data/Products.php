@@ -203,4 +203,18 @@ final class Products
         $related = array_filter(self::$products, fn($p) => $p['category'] === $product['category'] && $p['id'] !== $productId);
         return array_slice(array_values($related), 0, $limit);
     }
+
+    public static function newArrivals(int $limit = 4): array
+    {
+        $products = self::$products;
+        usort($products, fn($a, $b) => $b['id'] - $a['id']);
+        return array_slice($products, 0, $limit);
+    }
+
+    public static function trending(int $limit = 4): array
+    {
+        $products = self::$products;
+        usort($products, fn($a, $b) => $b['reviews'] - $a['reviews']);
+        return array_slice($products, 0, $limit);
+    }
 }
