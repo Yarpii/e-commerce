@@ -50,9 +50,7 @@
         <div class="grid gap-6 lg:grid-cols-2 lg:items-center">
             <div>
                 <a href="/" class="flex items-center gap-2.5 mb-3">
-                    <div class="w-9 h-9 rounded-lg bg-[var(--color-accent)] flex items-center justify-center">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                    </div>
+                    <img src="/assets/dark_icon.png" alt="Structbrew" class="h-9 w-9">
                     <span class="text-lg font-bold text-white">Struct<span class="text-[var(--color-accent)]">brew</span></span>
                 </a>
                 <p class="text-[0.9375rem] text-gray-400">Your one-stop shop for premium tech and accessories.</p>
