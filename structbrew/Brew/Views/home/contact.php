@@ -1,42 +1,80 @@
-<section class="relative overflow-hidden bg-white dark:bg-brew-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
-    <div class="absolute inset-0 -z-10">
-        <div class="absolute top-[-10rem] left-[-8rem] w-[400px] h-[400px] bg-brew-accent/15 blur-[120px] rounded-full"></div>
-        <div class="absolute bottom-[-8rem] right-[-6rem] w-[350px] h-[350px] bg-brew-primary/10 blur-[100px] rounded-full"></div>
+<section class="mx-auto w-full max-w-6xl space-y-8 px-4 py-10 sm:px-6 lg:px-8" x-data="{ loading: false }">
+    <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/90 p-6 sm:p-8" style="box-shadow: var(--shadow-sm)">
+        <h1 class="text-3xl font-bold tracking-tight text-[var(--color-text)]">Get in Touch</h1>
+        <p class="mt-2 text-[var(--color-muted)]">We'd love to hear from you — send us a message or reach us directly.</p>
     </div>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20 text-center">
-        <h1 class="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-brew-accent via-brew-primary to-brew-deep bg-clip-text text-transparent">
-            <?= htmlspecialchars($title ?? 'Contact') ?>
-        </h1>
-        <p class="mt-4 text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            <?= htmlspecialchars($message ?? 'Get in touch with us.') ?>
-        </p>
-    </div>
-</section>
 
-<section class="relative overflow-hidden bg-base-100 dark:bg-brew-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
-    <div class="relative z-10 max-w-2xl mx-auto px-6 py-16">
-        <form class="space-y-6">
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
-                <input type="text" id="name" name="name" required
-                       class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-brew-dark/70 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-brew-accent/50 focus:border-brew-accent outline-none transition-all duration-200">
-            </div>
-            <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                <input type="email" id="email" name="email" required
-                       class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-brew-dark/70 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-brew-accent/50 focus:border-brew-accent outline-none transition-all duration-200">
-            </div>
-            <div>
-                <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
-                <textarea id="message" name="message" rows="5" required
-                          class="w-full px-4 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-brew-dark/70 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-brew-accent/50 focus:border-brew-accent outline-none transition-all duration-200 resize-vertical"></textarea>
-            </div>
-            <div class="text-center">
-                <button type="submit"
-                        class="px-8 py-2.5 rounded-lg bg-gradient-to-r from-brew-accent to-brew-primary text-white font-semibold hover:opacity-90 transition-opacity duration-200">
-                    Send Message
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+        <!-- Contact Form -->
+        <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6" style="box-shadow: var(--shadow-sm)">
+            <h2 class="text-xl font-semibold text-[var(--color-text)]">Send us a message</h2>
+            <form class="mt-4 space-y-4" @submit.prevent="loading = true; setTimeout(() => { loading = false; alert('Message sent! (demo)'); }, 1000)">
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-[var(--color-text)]" for="contact-name">Name <span class="text-[var(--color-accent)]">*</span></label>
+                        <input id="contact-name" type="text" name="name" required autocomplete="name"
+                               class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-[var(--color-text)]" for="contact-email">Email <span class="text-[var(--color-accent)]">*</span></label>
+                        <input id="contact-email" type="email" name="email" required autocomplete="email" spellcheck="false"
+                               class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10">
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-[var(--color-text)]" for="contact-phone">Phone</label>
+                        <input id="contact-phone" type="tel" name="phone" autocomplete="tel"
+                               class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium text-[var(--color-text)]" for="contact-subject">Subject <span class="text-[var(--color-accent)]">*</span></label>
+                        <select id="contact-subject" name="subject" required
+                                class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10">
+                            <option value="" disabled selected>Choose a subject</option>
+                            <option value="order">Order question</option>
+                            <option value="return">Return request</option>
+                            <option value="technical">Technical question</option>
+                            <option value="product">Product compatibility</option>
+                            <option value="shipping">Delivery / Tracking</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-[var(--color-text)]" for="contact-message">Message <span class="text-[var(--color-accent)]">*</span></label>
+                    <textarea id="contact-message" name="message" required rows="6"
+                              class="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-2.5 text-sm text-[var(--color-text)] transition focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/10 resize-vertical"></textarea>
+                </div>
+
+                <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-[var(--color-accent)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-accent-hover)] disabled:cursor-not-allowed disabled:opacity-70" :disabled="loading">
+                    <span x-show="!loading">Send Message</span>
+                    <span x-show="loading" x-cloak class="animate-pulse">Sending...</span>
                 </button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="space-y-4">
+            <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" style="box-shadow: var(--shadow-sm)">
+                <h2 class="text-lg font-semibold text-[var(--color-text)]">Direct Contact</h2>
+                <ul class="mt-3 space-y-2 text-sm">
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="tel:+18005551234">+1 800 555 1234</a></li>
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="mailto:support@structbrew.store">support@structbrew.store</a></li>
+                    <li class="text-[var(--color-muted)]">Mon - Fri: 09:00 - 17:00</li>
+                </ul>
             </div>
-        </form>
+
+            <div class="rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5" style="box-shadow: var(--shadow-sm)">
+                <h3 class="text-base font-semibold text-[var(--color-text)]">Quick Links</h3>
+                <ul class="mt-3 space-y-2 text-sm">
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="/shop">Browse Products</a></li>
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="/cart">View Cart</a></li>
+                    <li><a class="text-[var(--color-accent)] hover:underline" href="/login">My Account</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 </section>
